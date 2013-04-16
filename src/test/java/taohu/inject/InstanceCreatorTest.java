@@ -7,11 +7,6 @@ import static org.junit.Assert.assertThat;
 
 public class InstanceCreatorTest {
 
-//    public class NestedNoParaCtor {
-//        public NestedNoParaCtor() {
-//        }
-//    }
-
     @Test
     public void shouldCreateInstanceOfAClassWithAParameterlessConstructor
             () throws Exception {
@@ -21,12 +16,24 @@ public class InstanceCreatorTest {
         assertThat((NoParaCtor) instance, isA(NoParaCtor.class));
     }
 
-//    @Test
-//    public void shouldCreateInstanceOfANestedClassWithAParameterlessConstructor
-//            () throws Exception {
-//        InstanceCreator instanceCreator = new InstanceCreator();
-//        Object instance = instanceCreator.getInstanceOf("taohu.inject.InstanceCreatorTest$NestedNoParaCtor");
-//
-//        assertThat((NestedNoParaCtor) instance, isA(NestedNoParaCtor.class));
-//    }
+    @Test
+    public void shouldCreateInstanceOfAClassWithOneParaConstructor
+            () throws Exception {
+        InstanceCreator instanceCreator = new InstanceCreator();
+        Object instance = instanceCreator.getInstanceOf("taohu.inject.OneParaCtor");
+
+        assertThat((OneParaCtor) instance, isA(OneParaCtor.class));
+        assertThat(((OneParaCtor) instance).getNoParaCtor(), isA(NoParaCtor.class));
+    }
+
+    @Test
+    public void shouldCreateInstanceOfAClassWithTwoParaConstructor
+            () throws Exception {
+        InstanceCreator instanceCreator = new InstanceCreator();
+        Object instance = instanceCreator.getInstanceOf("taohu.inject.TwoParaCtor");
+
+        assertThat((TwoParaCtor) instance, isA(TwoParaCtor.class));
+        assertThat(((TwoParaCtor) instance).getNoParaCtor(), isA(NoParaCtor.class));
+        assertThat(((TwoParaCtor) instance).getOneParaCtor(), isA(OneParaCtor.class));
+    }
 }
