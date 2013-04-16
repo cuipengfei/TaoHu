@@ -29,9 +29,5 @@
         </dependency>
     </dependencies>
 
-    <!--<properties>-->
-        <!--<maven.compiler.source>1.8</maven.compiler.source>-->
-        <!--&lt;!&ndash;<maven.compiler.target>1.8</maven.compiler.target>&ndash;&gt;-->
-    <!--</properties>-->
 </project>
 
