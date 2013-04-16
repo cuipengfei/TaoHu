@@ -2,8 +2,8 @@ package taohu.inject;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.sun.istack.internal.Nullable;
 
+import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
