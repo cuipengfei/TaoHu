@@ -1,6 +1,10 @@
 package taohu.inject;
 
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import taohu.inject.exception.InitialInstanceException;
+
+import java.lang.reflect.InvocationTargetException;
 
 import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.assertThat;
@@ -36,4 +40,16 @@ public class InstanceCreatorTest {
         assertThat(((TwoParaCtor) instance).getNoParaCtor(), isA(NoParaCtor.class));
         assertThat(((TwoParaCtor) instance).getOneParaCtor(), isA(OneParaCtor.class));
     }
+
+    @Test(expected=InitialInstanceException.class)
+    public void shouldHaveOnlyOneContructorHavingInjectAnnotation() throws Exception {
+        InstanceCreator instanceCreator = new InstanceCreator();
+        instanceCreator.getInstanceOf("taohu.inject.TwoInjectAnnotation");
+    }
+
+//    @Test()
+//    public void shouldHaveInjectAnnotationOnConstructorIfConstructorIsNotArgumentFree() throws Exception {
+//        InstanceCreator instanceCreator = new InstanceCreator();
+//        instanceCreator.getInstanceOf("taohu.inject.TwoInjectAnnotation");
+//    }
 }
