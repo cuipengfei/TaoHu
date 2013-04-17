@@ -1,4 +1,4 @@
-package taohu.inject;
+package taohu.inject.ctor;
 
 public class OneParaCtorWithoutAnnotation {
     private AnnotatedNoParaCtor annotatedNoParaCtor;
