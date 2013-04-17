@@ -51,14 +51,7 @@ public class InstanceCreator {
     private Constructor getSuitableConstructorFromMultipleConstructors(Constructor<?>[] constructors)
             throws Exception {
         Constructor<?> suitableConstructor;
-        List<Constructor<?>> constructorsAnnotatedWithInject = Lists.newArrayList(Iterables.filter(Lists.newArrayList(constructors),
-                new Predicate<Constructor<?>>() {
-                    @Override
-                    public boolean apply(@Nullable Constructor<?> input) {
-                        return isConstructorAnnotatedWithInject(input);
-                    }
-                }));
-
+        List<Constructor<?>> constructorsAnnotatedWithInject = getConstructorsAnnotatedWithInject(constructors);
         ConstructorAnnotationStatus status = inspectStatus(constructorsAnnotatedWithInject);
 
         if (status == ConstructorAnnotationStatus.OneAnnotatedAsInject) {
@@ -67,6 +60,16 @@ public class InstanceCreator {
             throw status.getException();
         }
         return suitableConstructor;
+    }
+
+    private List<Constructor<?>> getConstructorsAnnotatedWithInject(Constructor<?>[] constructors) {
+        return Lists.newArrayList(Iterables.filter(Lists.newArrayList(constructors),
+                new Predicate<Constructor<?>>() {
+                    @Override
+                    public boolean apply(@Nullable Constructor<?> input) {
+                        return isConstructorAnnotatedWithInject(input);
+                    }
+                }));
     }
 
     private ConstructorAnnotationStatus inspectStatus(List<Constructor<?>> constructorsAnnotatedWithInject) {
