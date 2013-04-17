@@ -2,10 +2,10 @@ package taohu.inject;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.sun.istack.internal.Nullable;
 import taohu.inject.exception.IllegalAnnotationQuantityException;
 import taohu.inject.exception.LackOfAnnotationException;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
