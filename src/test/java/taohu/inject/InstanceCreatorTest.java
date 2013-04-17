@@ -37,4 +37,12 @@ public class InstanceCreatorTest {
         assertThat(((TwoParaCtor) instance).getNoParaCtor(), isA(NoParaCtor.class));
         assertThat(((TwoParaCtor) instance).getOneParaCtor(), isA(OneParaCtor.class));
     }
+
+    @Test
+    public void shouldCreateInstanceOfAClassWithDefaultConstructorWithoutInjectAnnotation() throws Exception{
+        InstanceCreator instanceCreator = new InstanceCreator();
+        Object instance = instanceCreator.getInstanceOf("taohu.inject.DefaultCtor");
+
+        assertThat((DefaultCtor) instance, isA(DefaultCtor.class));
+    }
 }
