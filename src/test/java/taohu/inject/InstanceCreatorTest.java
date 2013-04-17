@@ -47,9 +47,10 @@ public class InstanceCreatorTest {
         instanceCreator.getInstanceOf("taohu.inject.TwoInjectAnnotation");
     }
 
-//    @Test()
-//    public void shouldHaveInjectAnnotationOnConstructorIfConstructorIsNotArgumentFree() throws Exception {
-//        InstanceCreator instanceCreator = new InstanceCreator();
-//        instanceCreator.getInstanceOf("taohu.inject.TwoInjectAnnotation");
-//    }
+    @Test
+    public void DoNotHaveToHaveInjectAnnotationOnArgumentsFreeConstructor() throws Exception {
+        InstanceCreator instanceCreator = new InstanceCreator();
+        Object instance = instanceCreator.getInstanceOf("taohu.inject.NoAnnotationAndNoArgumentsOnConstructor");
+        assertThat((NoAnnotationAndNoArgumentsOnConstructor) instance, isA(NoAnnotationAndNoArgumentsOnConstructor.class));
+    }
 }

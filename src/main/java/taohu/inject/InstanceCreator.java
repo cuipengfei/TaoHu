@@ -33,21 +33,34 @@ public class InstanceCreator {
     private Constructor getSuitableConstructor(Class<?> clazz) throws InitialInstanceException {
         Constructor<?>[] constructors = clazz.getConstructors();
 
-        Constructor havingInjectAnnotation = null;
+        Constructor suitableConstructor = null;
         int count = 0;
         for (Constructor constructor : constructors) {
             ArrayList<Annotation> annotations = Lists.newArrayList(constructor.getAnnotations());
-            for (Annotation annotation : annotations) {
-                if (annotation.annotationType().equals(Inject.class)) {
-                    havingInjectAnnotation = constructor;
-                    count++;
+            boolean hasParameter = constructor.getParameterTypes().length > 0;
+
+            if(!hasParameter){
+                suitableConstructor = constructor;
+                count++;
+            }else{
+                for (Annotation annotation : annotations) {
+                    if (annotation.annotationType().equals(Inject.class)) {
+                        suitableConstructor = constructor;
+                        count++;
+                    }
                 }
             }
         }
+
+        if(count == 0){
+            throw new InitialInstanceException("There is at least one constructor width inject annotation");
+        }
+
         if(count > 1){
             throw new InitialInstanceException("There is at most one constructor with inject annotation");
         }
-        return havingInjectAnnotation;
+
+        return suitableConstructor;
     }
 
     private List<Object> getParameters(Class<?>[] parameterTypes) {
