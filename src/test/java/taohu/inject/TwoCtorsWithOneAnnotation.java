@@ -4,11 +4,11 @@ import javax.inject.Inject;
 
 public class TwoCtorsWithOneAnnotation {
 
-    private NoParaCtor noParaCtor;
+    private AnnotatedNoParaCtor annotatedNoParaCtor;
     private OneParaCtor oneParaCtor;
 
-    public TwoCtorsWithOneAnnotation(NoParaCtor noParaCtor) {
-        this.noParaCtor = noParaCtor;
+    public TwoCtorsWithOneAnnotation(AnnotatedNoParaCtor annotatedNoParaCtor) {
+        this.annotatedNoParaCtor = annotatedNoParaCtor;
     }
 
     @Inject
@@ -16,8 +16,8 @@ public class TwoCtorsWithOneAnnotation {
         this.oneParaCtor = oneParaCtor;
     }
 
-    public NoParaCtor getNoParaCtor(){
-        return this.noParaCtor;
+    public AnnotatedNoParaCtor getAnnotatedNoParaCtor(){
+        return this.annotatedNoParaCtor;
     }
 
     public OneParaCtor getOneParaCtor(){

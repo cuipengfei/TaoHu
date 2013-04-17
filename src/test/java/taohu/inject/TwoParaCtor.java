@@ -3,17 +3,17 @@ package taohu.inject;
 import javax.inject.Inject;
 
 public class TwoParaCtor {
-    private NoParaCtor noParaCtor;
+    private AnnotatedNoParaCtor annotatedNoParaCtor;
     private OneParaCtor oneParaCtor;
 
     @Inject
-    public TwoParaCtor(NoParaCtor noParaCtor, OneParaCtor oneParaCtor) {
-        this.noParaCtor = noParaCtor;
+    public TwoParaCtor(AnnotatedNoParaCtor annotatedNoParaCtor, OneParaCtor oneParaCtor) {
+        this.annotatedNoParaCtor = annotatedNoParaCtor;
         this.oneParaCtor = oneParaCtor;
     }
 
-    public NoParaCtor getNoParaCtor() {
-        return noParaCtor;
+    public AnnotatedNoParaCtor getAnnotatedNoParaCtor() {
+        return annotatedNoParaCtor;
     }
 
     public OneParaCtor getOneParaCtor() {

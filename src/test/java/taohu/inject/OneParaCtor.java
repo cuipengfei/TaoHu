@@ -3,14 +3,14 @@ package taohu.inject;
 import javax.inject.Inject;
 
 public class OneParaCtor {
-    private NoParaCtor noParaCtor;
+    private AnnotatedNoParaCtor annotatedNoParaCtor;
 
     @Inject
-    public OneParaCtor(NoParaCtor noParaCtor) {
-        this.noParaCtor = noParaCtor;
+    public OneParaCtor(AnnotatedNoParaCtor annotatedNoParaCtor) {
+        this.annotatedNoParaCtor = annotatedNoParaCtor;
     }
 
-    public NoParaCtor getNoParaCtor() {
-        return noParaCtor;
+    public AnnotatedNoParaCtor getAnnotatedNoParaCtor() {
+        return annotatedNoParaCtor;
     }
 }

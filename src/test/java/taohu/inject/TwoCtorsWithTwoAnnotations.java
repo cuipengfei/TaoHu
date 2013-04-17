@@ -9,6 +9,6 @@ public class TwoCtorsWithTwoAnnotations {
     }
 
     @Inject
-    public TwoCtorsWithTwoAnnotations(NoParaCtor noParaCtor) {
+    public TwoCtorsWithTwoAnnotations(AnnotatedNoParaCtor annotatedNoParaCtor) {
     }
 }

@@ -1,15 +1,13 @@
 package taohu.inject;
 
-import javax.inject.Inject;
-
 public class OneParaCtorWithoutAnnotation {
-    private NoParaCtor noParaCtor;
+    private AnnotatedNoParaCtor annotatedNoParaCtor;
 
-    public OneParaCtorWithoutAnnotation(NoParaCtor noParaCtor) {
-        this.noParaCtor = noParaCtor;
+    public OneParaCtorWithoutAnnotation(AnnotatedNoParaCtor annotatedNoParaCtor) {
+        this.annotatedNoParaCtor = annotatedNoParaCtor;
     }
 
-    public NoParaCtor getNoParaCtor() {
-        return noParaCtor;
+    public AnnotatedNoParaCtor getAnnotatedNoParaCtor() {
+        return annotatedNoParaCtor;
     }
 }
