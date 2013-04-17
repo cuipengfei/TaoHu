@@ -9,7 +9,7 @@ import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class DependencyInjectorTest {
+public class DependencyInjectorCtorTest {
 
     @Test
     public void shouldCreateInstanceOfAClassWithAParameterlessConstructorWithInjectAnnotation

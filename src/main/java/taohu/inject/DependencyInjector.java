@@ -1,11 +1,16 @@
 package taohu.inject;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import taohu.inject.exception.LackOfAnnotationException;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class DependencyInjector {
@@ -17,10 +22,39 @@ public class DependencyInjector {
         Class<?>[] parameterTypes = constructor.getParameterTypes();
         List<Object> parameters = getParameters(parameterTypes);
 
+        Object instance;
         if (parameters.size() > 0) {
-            return constructor.newInstance(parameters.toArray());
+            instance = constructor.newInstance(parameters.toArray());
         } else {
-            return constructor.newInstance();
+            instance = constructor.newInstance();
+        }
+
+        injectSetters(instance, clazz);
+
+        return instance;
+    }
+
+    private void injectSetters(Object instance, Class<?> clazz) throws InvocationTargetException, IllegalAccessException {
+        Method[] methods = clazz.getMethods();
+        Iterable<Method> methodsWithInject = Iterables.filter(Lists.newArrayList(methods), new Predicate<Method>() {
+            @Override
+            public boolean apply(@Nullable Method input) {
+                return input.getAnnotation(Inject.class) != null;
+            }
+        });
+
+        callSetters(instance, methodsWithInject);
+    }
+
+    private void callSetters(Object instance, Iterable<Method> methodsWithInject) throws IllegalAccessException, InvocationTargetException {
+        for (Method method : methodsWithInject) {
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            if (parameterTypes.length == 0) {
+                method.invoke(instance);
+            } else {
+                List<Object> parameters = getParameters(parameterTypes);
+                method.invoke(instance, parameters.toArray());
+            }
         }
     }
 
