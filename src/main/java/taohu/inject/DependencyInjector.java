@@ -13,8 +13,8 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstanceCreator {
-    public Object getInstanceOf(String className)
+public class DependencyInjector {
+    public Object createInstanceAndInjectDependencies(String className)
             throws Exception {
         Class<?> clazz = Class.forName(className);
         Constructor<?> constructor = getSuitableConstructor(clazz);
@@ -115,7 +115,7 @@ public class InstanceCreator {
             public Object apply(@Nullable Class<?> paraType) {
                 String paraTypeName = paraType.getName();
                 try {
-                    return getInstanceOf(paraTypeName);
+                    return createInstanceAndInjectDependencies(paraTypeName);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
