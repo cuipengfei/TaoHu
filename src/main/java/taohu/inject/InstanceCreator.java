@@ -4,7 +4,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.sun.istack.internal.Nullable;
 import taohu.inject.exception.IllegalAnnotationQuantityException;
-import taohu.inject.exception.InitialInstanceException;
 import taohu.inject.exception.LackOfAnnotationException;
 
 import javax.inject.Inject;
@@ -60,11 +59,11 @@ public class InstanceCreator {
                 }
             }
 
-            if(annotationCount == 0){
+            if (annotationCount == 0) {
                 throw new LackOfAnnotationException("Should have Inject annotation on one of Constructors");
             }
 
-            if(annotationCount > 1){
+            if (annotationCount > 1) {
                 throw new IllegalAnnotationQuantityException("Only allow one constructor to have Inject annotation");
             }
         }
