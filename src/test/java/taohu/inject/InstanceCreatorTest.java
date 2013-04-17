@@ -1,7 +1,7 @@
 package taohu.inject;
 
 import org.junit.Test;
-import taohu.inject.exception.InitialInstanceException;
+import taohu.inject.exception.LackOfAnnotationException;
 
 import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.assertThat;
@@ -39,10 +39,17 @@ public class InstanceCreatorTest {
     }
 
     @Test
-    public void shouldCreateInstanceOfAClassWithDefaultConstructorWithoutInjectAnnotation() throws Exception{
+    public void shouldCreateInstanceOfAClassWithDefaultConstructorWithoutInjectAnnotation() throws Exception {
         InstanceCreator instanceCreator = new InstanceCreator();
         Object instance = instanceCreator.getInstanceOf("taohu.inject.DefaultCtor");
 
         assertThat((DefaultCtor) instance, isA(DefaultCtor.class));
     }
+
+    @Test(expected = LackOfAnnotationException.class)
+    public void shouldRequireInjectAnnotationForContructorsWithPara() throws Exception {
+        InstanceCreator instanceCreator = new InstanceCreator();
+        instanceCreator.getInstanceOf("taohu.inject.OneParaCtorWithoutAnnotation");
+    }
+
 }

@@ -2,11 +2,10 @@ package taohu.inject;
 
 import javax.inject.Inject;
 
-public class OneParaCtor {
+public class OneParaCtorWithoutAnnotation {
     private NoParaCtor noParaCtor;
 
-    @Inject
-    public OneParaCtor(NoParaCtor noParaCtor) {
+    public OneParaCtorWithoutAnnotation(NoParaCtor noParaCtor) {
         this.noParaCtor = noParaCtor;
     }
 
