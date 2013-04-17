@@ -21,6 +21,17 @@ public class DependencyInjectorSetterTest {
     }
 
     @Test
+    public void shouldCallMultiParameteredSetterWithInjectAndProvideParameters()
+            throws Exception {
+        DependencyInjector dependencyInjector = new DependencyInjector();
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.setter.SetterWithInject");
+
+        assertThat((SetterWithInject) instance, isA(SetterWithInject.class));
+        assertThat(((SetterWithInject) instance).getNoParaCtor2(), isA(NoParaCtor.class));
+        assertThat(((SetterWithInject) instance).getNoParaCtor3(), isA(NoParaCtor.class));
+    }
+
+    @Test
     public void shouldNotCallSetterWithInjectAndProvidePara()
             throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();

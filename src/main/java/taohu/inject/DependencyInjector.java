@@ -19,6 +19,13 @@ public class DependencyInjector {
         Class<?> clazz = Class.forName(className);
         Constructor<?> constructor = getSuitableConstructor(clazz);
 
+        Object instance = injectConstructor(constructor);
+        injectSetters(instance, clazz);
+
+        return instance;
+    }
+
+    private Object injectConstructor(Constructor<?> constructor) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Class<?>[] parameterTypes = constructor.getParameterTypes();
         List<Object> parameters = getParameters(parameterTypes);
 
@@ -28,9 +35,6 @@ public class DependencyInjector {
         } else {
             instance = constructor.newInstance();
         }
-
-        injectSetters(instance, clazz);
-
         return instance;
     }
 
