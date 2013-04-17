@@ -6,7 +6,6 @@ public class TwoParaCtor {
     private NoParaCtor noParaCtor;
     private OneParaCtor oneParaCtor;
 
-    @Inject
     public TwoParaCtor(NoParaCtor noParaCtor, OneParaCtor oneParaCtor) {
         this.noParaCtor = noParaCtor;
         this.oneParaCtor = oneParaCtor;

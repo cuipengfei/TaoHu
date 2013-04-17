@@ -11,12 +11,10 @@ import javax.inject.Inject;
  */
 public class TwoInjectAnnotation {
 
-    @Inject
     public TwoInjectAnnotation(){
 
     }
 
-    @Inject
     public TwoInjectAnnotation(NoParaCtor noParaCtor){
 
     }

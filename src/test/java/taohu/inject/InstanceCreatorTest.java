@@ -37,17 +37,4 @@ public class InstanceCreatorTest {
         assertThat(((TwoParaCtor) instance).getNoParaCtor(), isA(NoParaCtor.class));
         assertThat(((TwoParaCtor) instance).getOneParaCtor(), isA(OneParaCtor.class));
     }
-
-    @Test(expected=InitialInstanceException.class)
-    public void shouldHaveOnlyOneContructorHavingInjectAnnotation() throws Exception {
-        InstanceCreator instanceCreator = new InstanceCreator();
-        instanceCreator.getInstanceOf("taohu.inject.TwoInjectAnnotation");
-    }
-
-    @Test
-    public void DoNotHaveToHaveInjectAnnotationOnArgumentsFreeConstructor() throws Exception {
-        InstanceCreator instanceCreator = new InstanceCreator();
-        Object instance = instanceCreator.getInstanceOf("taohu.inject.NoAnnotationAndNoArgumentsOnCtor");
-        assertThat((NoAnnotationAndNoArgumentsOnCtor) instance, isA(NoAnnotationAndNoArgumentsOnCtor.class));
-    }
 }
