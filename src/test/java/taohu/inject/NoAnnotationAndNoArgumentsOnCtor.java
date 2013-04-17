@@ -7,9 +7,9 @@ package taohu.inject;
  * Time: 上午10:57
  * To change this template use File | Settings | File Templates.
  */
-public class NoAnnotationAndNoArgumentsOnConstructor {
+public class NoAnnotationAndNoArgumentsOnCtor {
 
-    public NoAnnotationAndNoArgumentsOnConstructor(){
+    public NoAnnotationAndNoArgumentsOnCtor(){
 
     }
 }

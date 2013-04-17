@@ -1,10 +1,7 @@
 package taohu.inject;
 
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import taohu.inject.exception.InitialInstanceException;
-
-import java.lang.reflect.InvocationTargetException;
 
 import static org.hamcrest.CoreMatchers.isA;
 import static org.junit.Assert.assertThat;
@@ -50,7 +47,7 @@ public class InstanceCreatorTest {
     @Test
     public void DoNotHaveToHaveInjectAnnotationOnArgumentsFreeConstructor() throws Exception {
         InstanceCreator instanceCreator = new InstanceCreator();
-        Object instance = instanceCreator.getInstanceOf("taohu.inject.NoAnnotationAndNoArgumentsOnConstructor");
-        assertThat((NoAnnotationAndNoArgumentsOnConstructor) instance, isA(NoAnnotationAndNoArgumentsOnConstructor.class));
+        Object instance = instanceCreator.getInstanceOf("taohu.inject.NoAnnotationAndNoArgumentsOnCtor");
+        assertThat((NoAnnotationAndNoArgumentsOnCtor) instance, isA(NoAnnotationAndNoArgumentsOnCtor.class));
     }
 }
