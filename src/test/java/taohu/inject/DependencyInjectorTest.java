@@ -1,6 +1,7 @@
 package taohu.inject;
 
 import org.junit.Test;
+import taohu.inject.ctor.*;
 import taohu.inject.exception.IllegalAnnotationQuantityException;
 import taohu.inject.exception.LackOfAnnotationException;
 
@@ -14,7 +15,7 @@ public class DependencyInjectorTest {
     public void shouldCreateInstanceOfAClassWithAParameterlessConstructorWithInjectAnnotation
             () throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.AnnotatedNoParaCtor");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.ctor.AnnotatedNoParaCtor");
 
         assertThat((AnnotatedNoParaCtor) instance, isA(AnnotatedNoParaCtor.class));
     }
@@ -23,7 +24,7 @@ public class DependencyInjectorTest {
     public void shouldCreateInstanceOfAClassWithOneParaConstructor
             () throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.OneParaCtor");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.ctor.OneParaCtor");
 
         assertThat((OneParaCtor) instance, isA(OneParaCtor.class));
         assertThat(((OneParaCtor) instance).getAnnotatedNoParaCtor(), isA(AnnotatedNoParaCtor.class));
@@ -33,7 +34,7 @@ public class DependencyInjectorTest {
     public void shouldCreateInstanceOfAClassWithTwoParaConstructor
             () throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.TwoParaCtor");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.ctor.TwoParaCtor");
 
         assertThat((TwoParaCtor) instance, isA(TwoParaCtor.class));
         assertThat(((TwoParaCtor) instance).getAnnotatedNoParaCtor(), isA(AnnotatedNoParaCtor.class));
@@ -43,7 +44,7 @@ public class DependencyInjectorTest {
     @Test
     public void shouldCreateInstanceOfAClassWithDefaultConstructorWithoutInjectAnnotation() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.NoParaCtor");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.ctor.NoParaCtor");
 
         assertThat((NoParaCtor) instance, isA(NoParaCtor.class));
     }
@@ -51,19 +52,19 @@ public class DependencyInjectorTest {
     @Test(expected = LackOfAnnotationException.class)
     public void shouldThrowExceptionWhenOnlyCtorWithParameterIsNotAnnotated() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.OneParaCtorWithoutAnnotation");
+        dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.ctor.OneParaCtorWithoutAnnotation");
     }
 
     @Test(expected = LackOfAnnotationException.class)
     public void shouldThrowExceptionWhenBothCtorsAreNotAnnotated() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.TwoCtorsWithoutAnnotation");
+        dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.ctor.TwoCtorsWithoutAnnotation");
     }
 
     @Test
     public void shouldCallTheAnnotatedCtorWhenThereAreTwoCtors() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.TwoCtorsOneParaLessWithOneAnnotation");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.ctor.TwoCtorsOneParaLessWithOneAnnotation");
         assertThat((TwoCtorsOneParaLessWithOneAnnotation) instance, isA(TwoCtorsOneParaLessWithOneAnnotation.class));
         assertThat(((TwoCtorsOneParaLessWithOneAnnotation) instance).getAnnotatedNoParaCtor(), isA(AnnotatedNoParaCtor.class));
     }
@@ -71,7 +72,7 @@ public class DependencyInjectorTest {
     @Test
     public void shouldCreateInstanceOfAClassWithTwoConstructorsOneAnnotation() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.TwoCtorsWithOneAnnotation");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.ctor.TwoCtorsWithOneAnnotation");
         assertThat((TwoCtorsWithOneAnnotation) instance, isA(TwoCtorsWithOneAnnotation.class));
         assertThat(((TwoCtorsWithOneAnnotation) instance).getAnnotatedNoParaCtor(), nullValue());
         assertThat(((TwoCtorsWithOneAnnotation) instance).getOneParaCtor(), isA(OneParaCtor.class));
@@ -80,6 +81,6 @@ public class DependencyInjectorTest {
     @Test(expected = IllegalAnnotationQuantityException.class)
     public void shouldThrowExceptionWhenTwoCtorsAreAnnotated() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.TwoCtorsWithTwoAnnotations");
+        dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.ctor.TwoCtorsWithTwoAnnotations");
     }
 }
