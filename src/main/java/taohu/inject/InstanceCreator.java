@@ -1,6 +1,8 @@
 package taohu.inject;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import taohu.inject.exception.IllegalAnnotationQuantityException;
 import taohu.inject.exception.LackOfAnnotationException;
@@ -15,9 +17,11 @@ import java.util.List;
 
 public class InstanceCreator {
     public Object getInstanceOf(String className)
-            throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, LackOfAnnotationException, IllegalAnnotationQuantityException {
+            throws ClassNotFoundException, NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException,
+            InstantiationException, LackOfAnnotationException,
+            IllegalAnnotationQuantityException {
         Class<?> clazz = Class.forName(className);
-
         Constructor<?> constructor = getSuitableConstructor(clazz);
 
         Class<?>[] parameterTypes = constructor.getParameterTypes();
@@ -31,7 +35,8 @@ public class InstanceCreator {
         }
     }
 
-    private Constructor<?> getSuitableConstructor(Class<?> clazz) throws LackOfAnnotationException, IllegalAnnotationQuantityException {
+    private Constructor<?> getSuitableConstructor(Class<?> clazz)
+            throws LackOfAnnotationException, IllegalAnnotationQuantityException {
         Constructor<?>[] constructors = clazz.getConstructors();
         Constructor suitableConstructor = null;
         if (constructors.length == 1) {
@@ -39,10 +44,14 @@ public class InstanceCreator {
             boolean hasPara = constructor.getParameterTypes().length > 0;
             if (hasPara) {
                 ArrayList<Annotation> annotations = Lists.newArrayList(constructor.getAnnotations());
-                for (Annotation annotation : annotations) {
-                    if (annotation.annotationType().equals(Inject.class)) {
-                        suitableConstructor = constructor;
+                boolean isAnnotatedWithInject = Iterables.any(annotations, new Predicate<Annotation>() {
+                    @Override
+                    public boolean apply(@Nullable Annotation input) {
+                        return input.annotationType().equals(Inject.class);
                     }
+                });
+                if (isAnnotatedWithInject) {
+                    suitableConstructor = constructor;
                 }
             } else {
                 suitableConstructor = constructor;
