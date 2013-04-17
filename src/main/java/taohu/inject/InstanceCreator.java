@@ -3,6 +3,7 @@ package taohu.inject;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.sun.istack.internal.Nullable;
+import taohu.inject.exception.IllegalAnnotationQuantityException;
 import taohu.inject.exception.InitialInstanceException;
 import taohu.inject.exception.LackOfAnnotationException;
 
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class InstanceCreator {
     public Object getInstanceOf(String className)
-            throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, LackOfAnnotationException {
+            throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, LackOfAnnotationException, IllegalAnnotationQuantityException {
         Class<?> clazz = Class.forName(className);
 
         Constructor<?> constructor = getSuitableConstructor(clazz);
@@ -31,23 +32,44 @@ public class InstanceCreator {
         }
     }
 
-    private Constructor<?> getSuitableConstructor(Class<?> clazz) throws LackOfAnnotationException {
+    private Constructor<?> getSuitableConstructor(Class<?> clazz) throws LackOfAnnotationException, IllegalAnnotationQuantityException {
         Constructor<?>[] constructors = clazz.getConstructors();
-        Constructor<?> constructor = constructors[0];
         Constructor suitableConstructor = null;
-        boolean hasPara = constructor.getParameterTypes().length > 0;
-        if(hasPara){
-            ArrayList<Annotation> annotations = Lists.newArrayList(constructor.getAnnotations());
-            for(Annotation annotation : annotations){
-                if(annotation.annotationType().equals(Inject.class)){
-                    suitableConstructor = constructor;
+        if (constructors.length == 1) {
+            Constructor<?> constructor = constructors[0];
+            boolean hasPara = constructor.getParameterTypes().length > 0;
+            if (hasPara) {
+                ArrayList<Annotation> annotations = Lists.newArrayList(constructor.getAnnotations());
+                for (Annotation annotation : annotations) {
+                    if (annotation.annotationType().equals(Inject.class)) {
+                        suitableConstructor = constructor;
+                    }
+                }
+            } else {
+                suitableConstructor = constructor;
+            }
+        } else {
+            int annotationCount = 0;
+            for (Constructor constructor : constructors) {
+                ArrayList<Annotation> annotations = Lists.newArrayList(constructor.getAnnotations());
+                for (Annotation annotation : annotations) {
+                    if (annotation.annotationType().equals(Inject.class)) {
+                        suitableConstructor = constructor;
+                        annotationCount++;
+                    }
                 }
             }
-        }else{
-            suitableConstructor = constructor;
+
+            if(annotationCount == 0){
+                throw new LackOfAnnotationException("Should have Inject annotation on one of Constructors");
+            }
+
+            if(annotationCount > 1){
+                throw new IllegalAnnotationQuantityException("Only allow one constructor to have Inject annotation");
+            }
         }
 
-        if(suitableConstructor == null){
+        if (suitableConstructor == null) {
             throw new LackOfAnnotationException("Should have Inject annotation on Constructor with parameters");
         }
 
