@@ -8,7 +8,6 @@ public class SetterWithInject {
     private NoParaCtor noParaCtor;
     private NoParaCtor noParaCtor2;
     private NoParaCtor noParaCtor3;
-    private String str;
 
     public NoParaCtor getNoParaCtor() {
         return noParaCtor;
@@ -20,16 +19,6 @@ public class SetterWithInject {
 
     public NoParaCtor getNoParaCtor3() {
         return noParaCtor3;
-    }
-
-
-    public String getStr() {
-        return str;
-    }
-
-    @Inject
-    public <T> void setSomething(T t, String str) {
-        this.str = str;
     }
 
     @Inject

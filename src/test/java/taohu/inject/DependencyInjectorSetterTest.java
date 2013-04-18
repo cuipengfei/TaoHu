@@ -3,6 +3,7 @@ package taohu.inject;
 import org.junit.Test;
 import taohu.inject.ctor.NoParaCtor;
 import taohu.inject.setter.SetterWithInject;
+import taohu.inject.setter.SetterWithInjectAndItsOwnTypePara;
 import taohu.inject.setter.SetterWithoutInject;
 
 import static org.hamcrest.CoreMatchers.isA;
@@ -44,8 +45,8 @@ public class DependencyInjectorSetterTest {
     @Test
     public void shouldNotCallMethodWithTypePara() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.setter.SetterWithInject");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.setter.SetterWithInjectAndItsOwnTypePara");
 
-        assertThat(((SetterWithInject) instance).getStr(), nullValue());
+        assertThat(((SetterWithInjectAndItsOwnTypePara) instance).getStr(), nullValue());
     }
 }
