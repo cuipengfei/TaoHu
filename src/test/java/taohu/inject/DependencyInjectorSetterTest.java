@@ -40,4 +40,12 @@ public class DependencyInjectorSetterTest {
         assertThat((SetterWithoutInject) instance, isA(SetterWithoutInject.class));
         assertThat(((SetterWithoutInject) instance).getNoParaCtor(), nullValue());
     }
+
+    @Test
+    public void shouldNotCallMethodWithTypePara() throws Exception {
+        DependencyInjector dependencyInjector = new DependencyInjector();
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.setter.SetterWithInject");
+
+        assertThat(((SetterWithInject) instance).getStr(), nullValue());
+    }
 }

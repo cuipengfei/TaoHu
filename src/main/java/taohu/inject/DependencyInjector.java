@@ -40,14 +40,15 @@ public class DependencyInjector {
 
     private void injectSetters(Object instance, Class<?> clazz) throws InvocationTargetException, IllegalAccessException {
         Method[] methods = clazz.getMethods();
-        Iterable<Method> methodsWithInject = Iterables.filter(Lists.newArrayList(methods), new Predicate<Method>() {
+        Iterable<Method> methodsWithInjectAndNoTypePara = Iterables.filter(Lists.newArrayList(methods), new Predicate<Method>() {
             @Override
             public boolean apply(@Nullable Method input) {
-                return input.getAnnotation(Inject.class) != null;
+                return input.getAnnotation(Inject.class) != null
+                        && input.getTypeParameters().length == 0;
             }
         });
 
-        callSetters(instance, methodsWithInject);
+        callSetters(instance, methodsWithInjectAndNoTypePara);
     }
 
     private void callSetters(Object instance, Iterable<Method> methodsWithInject) throws IllegalAccessException, InvocationTargetException {
