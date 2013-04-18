@@ -12,7 +12,7 @@
     <xsd:element name="bean">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="constructor" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="constructor-arg" minOccurs="0" maxOccurs="unbounded"/>
                 <xsd:element ref="properties" minOccurs="0" maxOccurs="1"/>
             </xsd:sequence>
             <xsd:attribute name="id" type="xsd:string"/>
@@ -20,11 +20,9 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="constructor">
+    <xsd:element name="constructor-arg">
         <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element ref="property" minOccurs="0" maxOccurs="unbounded"/>
-            </xsd:sequence>
+            <xsd:attribute name="ref" type="xsd:string"/>
         </xsd:complexType>
     </xsd:element>
 
@@ -40,7 +38,6 @@
         <xsd:complexType>
             <xsd:attribute name="name" type="xsd:string"/>
             <xsd:attribute name="ref" type="xsd:string"/>
-            <xsd:attribute name="value" type="xsd:string"/>
         </xsd:complexType>
     </xsd:element>
 
