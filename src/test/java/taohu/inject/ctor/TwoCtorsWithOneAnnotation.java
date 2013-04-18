@@ -16,11 +16,11 @@ public class TwoCtorsWithOneAnnotation {
         this.oneParaCtor = oneParaCtor;
     }
 
-    public AnnotatedNoParaCtor getAnnotatedNoParaCtor(){
+    public AnnotatedNoParaCtor getAnnotatedNoParaCtor() {
         return this.annotatedNoParaCtor;
     }
 
-    public OneParaCtor getOneParaCtor(){
+    public OneParaCtor getOneParaCtor() {
         return this.oneParaCtor;
     }
 }

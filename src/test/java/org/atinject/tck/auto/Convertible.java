@@ -18,8 +18,8 @@ package org.atinject.tck.auto;
 
 import junit.framework.TestCase;
 import org.atinject.tck.auto.accessories.Cupholder;
-import org.atinject.tck.auto.accessories.SpareTire;
 import org.atinject.tck.auto.accessories.RoundThing;
+import org.atinject.tck.auto.accessories.SpareTire;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,11 +27,18 @@ import javax.inject.Provider;
 
 public class Convertible implements Car {
 
-    @Inject @Drivers Seat driversSeatA;
-    @Inject @Drivers Seat driversSeatB;
-    @Inject SpareTire spareTire;
-    @Inject Cupholder cupholder;
-    @Inject Provider<Engine> engineProvider;
+    @Inject
+    @Drivers
+    Seat driversSeatA;
+    @Inject
+    @Drivers
+    Seat driversSeatB;
+    @Inject
+    SpareTire spareTire;
+    @Inject
+    Cupholder cupholder;
+    @Inject
+    Provider<Engine> engineProvider;
 
     private boolean methodWithZeroParamsInjected;
     private boolean methodWithMultipleParamsInjected;
@@ -46,14 +53,26 @@ public class Convertible implements Car {
     private Provider<Tire> constructorPlainTireProvider = nullProvider();
     private Provider<Tire> constructorSpareTireProvider = nullProvider();
 
-    @Inject Seat fieldPlainSeat;
-    @Inject @Drivers Seat fieldDriversSeat;
-    @Inject Tire fieldPlainTire;
-    @Inject @Named("spare") Tire fieldSpareTire;
-    @Inject Provider<Seat> fieldPlainSeatProvider = nullProvider();
-    @Inject @Drivers Provider<Seat> fieldDriversSeatProvider = nullProvider();
-    @Inject Provider<Tire> fieldPlainTireProvider = nullProvider();
-    @Inject @Named("spare") Provider<Tire> fieldSpareTireProvider = nullProvider();
+    @Inject
+    Seat fieldPlainSeat;
+    @Inject
+    @Drivers
+    Seat fieldDriversSeat;
+    @Inject
+    Tire fieldPlainTire;
+    @Inject
+    @Named("spare")
+    Tire fieldSpareTire;
+    @Inject
+    Provider<Seat> fieldPlainSeatProvider = nullProvider();
+    @Inject
+    @Drivers
+    Provider<Seat> fieldDriversSeatProvider = nullProvider();
+    @Inject
+    Provider<Tire> fieldPlainTireProvider = nullProvider();
+    @Inject
+    @Named("spare")
+    Provider<Tire> fieldSpareTireProvider = nullProvider();
 
     private Seat methodPlainSeat;
     private Seat methodDriversSeat;
@@ -64,14 +83,26 @@ public class Convertible implements Car {
     private Provider<Tire> methodPlainTireProvider = nullProvider();
     private Provider<Tire> methodSpareTireProvider = nullProvider();
 
-    @Inject static Seat staticFieldPlainSeat;
-    @Inject @Drivers static Seat staticFieldDriversSeat;
-    @Inject static Tire staticFieldPlainTire;
-    @Inject @Named("spare") static Tire staticFieldSpareTire;
-    @Inject static Provider<Seat> staticFieldPlainSeatProvider = nullProvider();
-    @Inject @Drivers static Provider<Seat> staticFieldDriversSeatProvider = nullProvider();
-    @Inject static Provider<Tire> staticFieldPlainTireProvider = nullProvider();
-    @Inject @Named("spare") static Provider<Tire> staticFieldSpareTireProvider = nullProvider();
+    @Inject
+    static Seat staticFieldPlainSeat;
+    @Inject
+    @Drivers
+    static Seat staticFieldDriversSeat;
+    @Inject
+    static Tire staticFieldPlainTire;
+    @Inject
+    @Named("spare")
+    static Tire staticFieldSpareTire;
+    @Inject
+    static Provider<Seat> staticFieldPlainSeatProvider = nullProvider();
+    @Inject
+    @Drivers
+    static Provider<Seat> staticFieldDriversSeatProvider = nullProvider();
+    @Inject
+    static Provider<Tire> staticFieldPlainTireProvider = nullProvider();
+    @Inject
+    @Named("spare")
+    static Provider<Tire> staticFieldSpareTireProvider = nullProvider();
 
     private static Seat staticMethodPlainSeat;
     private static Seat staticMethodDriversSeat;
@@ -82,7 +113,8 @@ public class Convertible implements Car {
     private static Provider<Tire> staticMethodPlainTireProvider = nullProvider();
     private static Provider<Tire> staticMethodSpareTireProvider = nullProvider();
 
-    @Inject Convertible(
+    @Inject
+    Convertible(
             Seat plainSeat,
             @Drivers Seat driversSeat,
             Tire plainTire,
@@ -109,16 +141,19 @@ public class Convertible implements Car {
         throw new AssertionError("Unexpected call to non-injectable method");
     }
 
-    @Inject void injectMethodWithZeroArgs() {
+    @Inject
+    void injectMethodWithZeroArgs() {
         methodWithZeroParamsInjected = true;
     }
 
-    @Inject String injectMethodWithNonVoidReturn() {
+    @Inject
+    String injectMethodWithNonVoidReturn() {
         methodWithNonVoidReturnInjected = true;
         return "unused";
     }
 
-    @Inject void injectInstanceMethodWithManyArgs(
+    @Inject
+    void injectInstanceMethodWithManyArgs(
             Seat plainSeat,
             @Drivers Seat driversSeat,
             Tire plainTire,
@@ -139,7 +174,8 @@ public class Convertible implements Car {
         methodSpareTireProvider = spareTireProvider;
     }
 
-    @Inject static void injectStaticMethodWithManyArgs(
+    @Inject
+    static void injectStaticMethodWithManyArgs(
             Seat plainSeat,
             @Drivers Seat driversSeat,
             Tire plainTire,

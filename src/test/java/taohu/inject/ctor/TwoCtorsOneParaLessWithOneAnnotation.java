@@ -14,7 +14,7 @@ public class TwoCtorsOneParaLessWithOneAnnotation {
         this.annotatedNoParaCtor = annotatedNoParaCtor;
     }
 
-    public AnnotatedNoParaCtor getAnnotatedNoParaCtor(){
+    public AnnotatedNoParaCtor getAnnotatedNoParaCtor() {
         return this.annotatedNoParaCtor;
     }
 }

@@ -16,18 +16,17 @@
 
 package org.atinject.tck;
 
-import org.atinject.tck.auto.Car;
-import org.atinject.tck.auto.Convertible;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.atinject.tck.auto.Car;
+import org.atinject.tck.auto.Convertible;
 
 /**
  * Manufactures the compatibility test suite. This TCK relies on
  * <a href="http://junit.org/">JUnit</a>. To integrate the TCK with your
  * injector, create a JUnit test suite class that passes an injected
  * {@link org.atinject.tck.auto.Car Car} instance to {@link #testsFor testsFor(Car)}:
- *
+ * <p/>
  * <pre>
  * import junit.framework.Test;
  * import org.atinject.tck.Tck;
@@ -48,25 +47,25 @@ import junit.framework.TestSuite;
  * <p>Configure the injector as follows:
  *
  * <ul>
- *   <li>{@link org.atinject.tck.auto.Car} is implemented by
- *       {@link org.atinject.tck.auto.Convertible Convertible}.
- *   <li>{@link org.atinject.tck.auto.Drivers @Drivers}
- *       {@link org.atinject.tck.auto.Seat Seat} is
- *       implemented by {@link org.atinject.tck.auto.DriversSeat DriversSeat}.
- *   <li>{@link org.atinject.tck.auto.Seat Seat} is
- *       implemented by {@link org.atinject.tck.auto.Seat Seat} itself, and
- *       {@link org.atinject.tck.auto.Tire Tire} by
- *       {@link org.atinject.tck.auto.Tire Tire} itself
- *       (not subclasses).
- *   <li>{@link org.atinject.tck.auto.Engine Engine} is implemented by
- *       {@link org.atinject.tck.auto.V8Engine V8Engine}.
- *   <li>{@link javax.inject.Named @Named("spare")}
- *       {@link org.atinject.tck.auto.Tire Tire} is implemented by
- *       {@link org.atinject.tck.auto.accessories.SpareTire SpareTire}.
- *   <li>The following classes may also be injected directly:
- *       {@link org.atinject.tck.auto.accessories.Cupholder Cupholder},
- *       {@link org.atinject.tck.auto.accessories.SpareTire SpareTire}, and
- *       {@link org.atinject.tck.auto.FuelTank FuelTank}.
+ * <li>{@link org.atinject.tck.auto.Car} is implemented by
+ * {@link org.atinject.tck.auto.Convertible Convertible}.
+ * <li>{@link org.atinject.tck.auto.Drivers @Drivers}
+ * {@link org.atinject.tck.auto.Seat Seat} is
+ * implemented by {@link org.atinject.tck.auto.DriversSeat DriversSeat}.
+ * <li>{@link org.atinject.tck.auto.Seat Seat} is
+ * implemented by {@link org.atinject.tck.auto.Seat Seat} itself, and
+ * {@link org.atinject.tck.auto.Tire Tire} by
+ * {@link org.atinject.tck.auto.Tire Tire} itself
+ * (not subclasses).
+ * <li>{@link org.atinject.tck.auto.Engine Engine} is implemented by
+ * {@link org.atinject.tck.auto.V8Engine V8Engine}.
+ * <li>{@link javax.inject.Named @Named("spare")}
+ * {@link org.atinject.tck.auto.Tire Tire} is implemented by
+ * {@link org.atinject.tck.auto.accessories.SpareTire SpareTire}.
+ * <li>The following classes may also be injected directly:
+ * {@link org.atinject.tck.auto.accessories.Cupholder Cupholder},
+ * {@link org.atinject.tck.auto.accessories.SpareTire SpareTire}, and
+ * {@link org.atinject.tck.auto.FuelTank FuelTank}.
  * </ul>
  *
  * <p>Static and private member injection support is optional, but if your
@@ -86,23 +85,23 @@ import junit.framework.TestSuite;
  */
 public class Tck {
 
-    private Tck() {}
+    private Tck() {
+    }
 
     /**
      * Constructs a JUnit test suite for the given {@link org.atinject.tck.auto.Car} instance.
      *
-     * @param car to test
-     * @param supportsStatic true if the injector supports static member
-     *  injection
+     * @param car             to test
+     * @param supportsStatic  true if the injector supports static member
+     *                        injection
      * @param supportsPrivate true if the injector supports private member
-     *  injection
-     *
+     *                        injection
      * @throws NullPointerException if car is null
-     * @throws ClassCastException if car doesn't extend
-     *  {@link org.atinject.tck.auto.Convertible Convertible}
+     * @throws ClassCastException   if car doesn't extend
+     *                              {@link org.atinject.tck.auto.Convertible Convertible}
      */
     public static Test testsFor(Car car, boolean supportsStatic,
-            boolean supportsPrivate) {
+                                boolean supportsPrivate) {
         if (car == null) {
             throw new NullPointerException("car");
         }

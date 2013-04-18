@@ -24,7 +24,8 @@ public abstract class GasEngine extends Engine {
         overriddenTwiceWithOmissionInMiddleInjected = true;
     }
 
-    @Inject public void injectTwiceOverriddenWithOmissionInSubclass() {
+    @Inject
+    public void injectTwiceOverriddenWithOmissionInSubclass() {
         overriddenTwiceWithOmissionInSubclassInjected = true;
     }
 }

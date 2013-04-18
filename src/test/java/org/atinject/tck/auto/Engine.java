@@ -40,16 +40,19 @@ public abstract class Engine {
     public boolean overriddenPackagePrivateMethodInjectedTwice;
     public boolean qualifiersInheritedFromOverriddenMethod;
 
-    @Inject void injectPackagePrivateMethod() {
+    @Inject
+    void injectPackagePrivateMethod() {
         superPackagePrivateMethodInjected = true;
     }
 
-    @Inject void injectPackagePrivateMethodForOverride() {
+    @Inject
+    void injectPackagePrivateMethodForOverride() {
         superPackagePrivateMethodForOverrideInjected = true;
     }
 
-    @Inject public void injectQualifiers(@Drivers Seat seatA, Seat seatB,
-            @Named("spare") Tire tireA, Tire tireB) {
+    @Inject
+    public void injectQualifiers(@Drivers Seat seatA, Seat seatB,
+                                 @Named("spare") Tire tireA, Tire tireB) {
         if (!(seatA instanceof DriversSeat)
                 || (seatB instanceof DriversSeat)
                 || !(tireA instanceof SpareTire)
@@ -58,11 +61,13 @@ public abstract class Engine {
         }
     }
 
-    @Inject public void injectTwiceOverriddenWithOmissionInMiddle() {
+    @Inject
+    public void injectTwiceOverriddenWithOmissionInMiddle() {
         overriddenTwiceWithOmissionInMiddleInjected = true;
     }
 
-    @Inject public void injectTwiceOverriddenWithOmissionInSubclass() {
+    @Inject
+    public void injectTwiceOverriddenWithOmissionInSubclass() {
         overriddenTwiceWithOmissionInSubclassInjected = true;
     }
 }
