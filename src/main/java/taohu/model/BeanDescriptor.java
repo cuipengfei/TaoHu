@@ -8,10 +8,6 @@ public class BeanDescriptor {
 
     private Class clazz;
 
-    private DependencyType dependencyType;
-
-    private Object value;
-
     private HashMap<String, PropertyDescriptor> constructorDependency = new HashMap();
 
     private HashMap<String, PropertyDescriptor> propertyDependency = new HashMap<>();
@@ -30,22 +26,6 @@ public class BeanDescriptor {
 
     public void setClazz(Class clazz) {
         this.clazz = clazz;
-    }
-
-    public DependencyType getDependencyType() {
-        return dependencyType;
-    }
-
-    public void setDependencyType(DependencyType dependencyType) {
-        this.dependencyType = dependencyType;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
     }
 
     public HashMap<String, PropertyDescriptor> getConstructorDependency() {
