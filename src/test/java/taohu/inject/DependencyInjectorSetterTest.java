@@ -32,7 +32,7 @@ public class DependencyInjectorSetterTest {
     }
 
     @Test
-    public void shouldNotCallSetterWithInjectAndProvidePara()
+    public void shouldNotCallSetterWithoutInject()
             throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.setter.SetterWithoutInject");
