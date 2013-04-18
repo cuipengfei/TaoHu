@@ -29,6 +29,7 @@ public class DependencyInjector {
         Class<?>[] parameterTypes = constructor.getParameterTypes();
         List<Object> parameters = getParameters(parameterTypes);
 
+        constructor.setAccessible(true);
         Object instance;
         if (parameters.size() > 0) {
             instance = constructor.newInstance(parameters.toArray());
@@ -67,7 +68,7 @@ public class DependencyInjector {
     private Constructor<?> getSuitableConstructor(Class<?> clazz)
             throws Exception {
         Constructor suitableConstructor;
-        Constructor<?>[] constructors = clazz.getConstructors();
+        Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 
         if (constructors.length == 1) {
             Constructor<?> onlyConstructor = constructors[0];
