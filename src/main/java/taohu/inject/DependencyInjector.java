@@ -26,7 +26,7 @@ public class DependencyInjector {
 
     private Object injectConstructor(Constructor<?> constructor) throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Class<?>[] parameterTypes = constructor.getParameterTypes();
-        List<Object> parameters = getParameters(parameterTypes);
+        List<Object> parameters = getInstances(parameterTypes);
 
         constructor.setAccessible(true);
         Object instance;
@@ -56,7 +56,7 @@ public class DependencyInjector {
         field.setAccessible(true);
 
         Class<?> fieldType = field.getType();
-        List<Object> fieldValue = getParameters(new Class<?>[]{fieldType});
+        List<Object> fieldValue = getInstances(new Class<?>[]{fieldType});
         field.set(instance, fieldValue.get(0));
     }
 
@@ -81,7 +81,7 @@ public class DependencyInjector {
         if (parameterTypes.length == 0) {
             method.invoke(instance);
         } else {
-            List<Object> parameters = getParameters(parameterTypes);
+            List<Object> parameters = getInstances(parameterTypes);
             method.invoke(instance, parameters.toArray());
         }
     }
@@ -131,13 +131,13 @@ public class DependencyInjector {
         }
     }
 
-    private List<Object> getParameters(Class<?>[] parameterTypes) {
-        return Lists.transform(Lists.newArrayList(parameterTypes), new Function<Class<?>, Object>() {
+    private List<Object> getInstances(Class<?>[] instanceTypes) {
+        return Lists.transform(Lists.newArrayList(instanceTypes), new Function<Class<?>, Object>() {
             @Override
-            public Object apply(@Nullable Class<?> paraType) {
-                String paraTypeName = paraType.getName();
+            public Object apply(@Nullable Class<?> instanceType) {
+                String typeName = instanceType.getName();
                 try {
-                    return createInstanceAndInjectDependencies(paraTypeName);
+                    return createInstanceAndInjectDependencies(typeName);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
