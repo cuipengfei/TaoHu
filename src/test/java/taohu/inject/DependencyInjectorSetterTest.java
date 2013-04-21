@@ -62,4 +62,12 @@ public class DependencyInjectorSetterTest {
 
         assertThat(((PvtSetter) instance).getNoParaCtor(), isA(NoParaCtor.class));
     }
+
+    @Test
+    public void shouldCallStaticSetter() throws Exception {
+        DependencyInjector dependencyInjector = new DependencyInjector();
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.setter.StaticSetter");
+
+        assertThat(((StaticSetter) instance).getNoParaCtor(), isA(NoParaCtor.class));
+    }
 }

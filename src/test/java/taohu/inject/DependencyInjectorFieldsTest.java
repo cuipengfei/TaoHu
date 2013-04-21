@@ -5,6 +5,7 @@ import taohu.inject.ctor.NoParaCtor;
 import taohu.inject.field.FinalField;
 import taohu.inject.field.PublicField;
 import taohu.inject.field.PvtField;
+import taohu.inject.field.StaticField;
 
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -33,5 +34,13 @@ public class DependencyInjectorFieldsTest {
         Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.field.FinalField");
 
         assertThat(((FinalField) instance).noParaCtor, nullValue());
+    }
+
+    @Test
+    public void shouldSetStaticField() throws Exception {
+        DependencyInjector dependencyInjector = new DependencyInjector();
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.field.StaticField");
+
+        assertThat(((StaticField) instance).noParaCtor, isA(NoParaCtor.class));
     }
 }
