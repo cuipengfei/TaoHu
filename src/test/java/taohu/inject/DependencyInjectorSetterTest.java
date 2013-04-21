@@ -2,10 +2,7 @@ package taohu.inject;
 
 import org.junit.Test;
 import taohu.inject.ctor.NoParaCtor;
-import taohu.inject.setter.SetterWithInject;
-import taohu.inject.setter.SetterWithInjectAndItsOwnTypePara;
-import taohu.inject.setter.SetterWithInjectAndTypeParaFromItClass;
-import taohu.inject.setter.SetterWithoutInject;
+import taohu.inject.setter.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -56,5 +53,13 @@ public class DependencyInjectorSetterTest {
         Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.setter.SetterWithInjectAndTypeParaFromItClass");
 
         assertThat(((SetterWithInjectAndTypeParaFromItClass) instance).getStr(), is("method called"));
+    }
+
+    @Test
+    public void shouldCallPrivateSetter() throws Exception {
+        DependencyInjector dependencyInjector = new DependencyInjector();
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.setter.PvtSetter");
+
+        assertThat(((PvtSetter) instance).getNoParaCtor(), isA(NoParaCtor.class));
     }
 }
