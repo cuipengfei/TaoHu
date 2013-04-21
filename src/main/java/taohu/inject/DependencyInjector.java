@@ -9,6 +9,7 @@ import taohu.inject.exception.LackOfAnnotationException;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -20,6 +21,7 @@ public class DependencyInjector {
         Constructor<?> constructor = getSuitableConstructor(clazz);
 
         Object instance = injectConstructor(constructor);
+        injectFields(instance, clazz);
         injectSetters(instance, clazz);
 
         return instance;
@@ -39,6 +41,27 @@ public class DependencyInjector {
         return instance;
     }
 
+    private void injectFields(Object instance, Class<?> clazz) throws IllegalAccessException {
+        Field[] fields = clazz.getDeclaredFields();
+        Iterable<Field> fieldsWithInject = Iterables.filter(Lists.newArrayList(fields), new Predicate<Field>() {
+            @Override
+            public boolean apply(@Nullable Field input) {
+                return input.getAnnotation(Inject.class) != null;
+            }
+        });
+        for (Field field : fieldsWithInject) {
+            setField(instance, field);
+        }
+    }
+
+    private void setField(Object instance, Field field) throws IllegalAccessException {
+        field.setAccessible(true);
+
+        Class<?> fieldType = field.getType();
+        List<Object> fieldValue = getParameters(new Class<?>[]{fieldType});
+        field.set(instance, fieldValue.get(0));
+    }
+
     private void injectSetters(Object instance, Class<?> clazz) throws InvocationTargetException, IllegalAccessException {
         Method[] methods = clazz.getDeclaredMethods();
         Iterable<Method> methodsWithInjectAndNoTypeParaOfItsOwn = Iterables.filter(Lists.newArrayList(methods), new Predicate<Method>() {
@@ -49,20 +72,19 @@ public class DependencyInjector {
             }
         });
 
-        callSetters(instance, methodsWithInjectAndNoTypeParaOfItsOwn);
+        for (Method method : methodsWithInjectAndNoTypeParaOfItsOwn) {
+            callSetter(instance, method);
+        }
     }
 
-    private void callSetters(Object instance, Iterable<Method> methodsWithInjectAndNoTypeParaOfItsOwn)
-            throws IllegalAccessException, InvocationTargetException {
-        for (Method method : methodsWithInjectAndNoTypeParaOfItsOwn) {
-            Class<?>[] parameterTypes = method.getParameterTypes();
-            method.setAccessible(true);
-            if (parameterTypes.length == 0) {
-                method.invoke(instance);
-            } else {
-                List<Object> parameters = getParameters(parameterTypes);
-                method.invoke(instance, parameters.toArray());
-            }
+    private void callSetter(Object instance, Method method) throws IllegalAccessException, InvocationTargetException {
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        method.setAccessible(true);
+        if (parameterTypes.length == 0) {
+            method.invoke(instance);
+        } else {
+            List<Object> parameters = getParameters(parameterTypes);
+            method.invoke(instance, parameters.toArray());
         }
     }
 
