@@ -8,10 +8,7 @@ import taohu.inject.exception.LackOfAnnotationException;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.List;
 
 public class DependencyInjector {
@@ -43,13 +40,14 @@ public class DependencyInjector {
 
     private void injectFields(Object instance, Class<?> clazz) throws IllegalAccessException {
         Field[] fields = clazz.getDeclaredFields();
-        Iterable<Field> fieldsWithInject = Iterables.filter(Lists.newArrayList(fields), new Predicate<Field>() {
+        Iterable<Field> nonFinalfieldsWithInject = Iterables.filter(Lists.newArrayList(fields), new Predicate<Field>() {
             @Override
             public boolean apply(@Nullable Field input) {
-                return input.getAnnotation(Inject.class) != null;
+                return input.getAnnotation(Inject.class) != null
+                        && !Modifier.isFinal(input.getModifiers());
             }
         });
-        for (Field field : fieldsWithInject) {
+        for (Field field : nonFinalfieldsWithInject) {
             setField(instance, field);
         }
     }
