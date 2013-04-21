@@ -4,7 +4,7 @@ public class PropertyDescriptor {
 
     private String name;
 
-    private BeanDescriptor reference;
+    private String beanId;
 
     private Object value;
 
@@ -16,12 +16,12 @@ public class PropertyDescriptor {
         this.name = name;
     }
 
-    public BeanDescriptor getReference() {
-        return reference;
+    public String getBeanId() {
+        return beanId;
     }
 
-    public void setReference(BeanDescriptor reference) {
-        this.reference = reference;
+    public void setBeanId(String beanId) {
+        this.beanId = beanId;
     }
 
     public Object getValue() {

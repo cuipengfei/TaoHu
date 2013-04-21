@@ -1,6 +1,9 @@
 package taohu.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BeanDescriptor {
 
@@ -8,9 +11,9 @@ public class BeanDescriptor {
 
     private Class clazz;
 
-    private HashMap<String, PropertyDescriptor> constructorDependency = new HashMap();
+    private List<ConstructorArgumentDescriptor> constructorDependency = new ArrayList<>();
 
-    private HashMap<String, PropertyDescriptor> propertyDependency = new HashMap<>();
+    private Map<String, PropertyDescriptor> propertyDependency = new HashMap<>();
 
     public String getId() {
         return id;
@@ -28,19 +31,15 @@ public class BeanDescriptor {
         this.clazz = clazz;
     }
 
-    public HashMap<String, PropertyDescriptor> getConstructorDependency() {
+    public List<ConstructorArgumentDescriptor> getConstructorDependency() {
         return constructorDependency;
     }
 
-    public void setConstructorDependency(HashMap<String, PropertyDescriptor> constructorDependency) {
-        this.constructorDependency = constructorDependency;
-    }
-
-    public HashMap<String, PropertyDescriptor> getPropertyDependency() {
+    public Map<String, PropertyDescriptor> getPropertyDependency() {
         return propertyDependency;
     }
 
-    public void setPropertyDependency(HashMap<String, PropertyDescriptor> propertyDependency) {
+    public void setPropertyDependency(Map<String, PropertyDescriptor> propertyDependency) {
         this.propertyDependency = propertyDependency;
     }
 }
