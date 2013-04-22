@@ -3,6 +3,7 @@ package taohu.Resolver;
 import org.junit.Test;
 import taohu.inject.ctor.AnnotatedNoParaCtor;
 import taohu.inject.ctor.OneParaCtor;
+import taohu.inject.ctor.TwoParaCtor;
 import taohu.model.BeanDescriptor;
 import taohu.model.ConstructorArgumentDescriptor;
 
@@ -29,7 +30,7 @@ public class BeanObjectFactoryTest {
     }
 
     @Test
-    public void shouldGetbeanObejctWithConstructorArguments() throws Exception {
+    public void shouldGetBeanObejctWithOneConstructorArguments() throws Exception {
         BeanDescriptor noParaDescriptor = new BeanDescriptor();
         noParaDescriptor.setId("noParaCtor");
         noParaDescriptor.setClazz(AnnotatedNoParaCtor.class);
@@ -51,5 +52,42 @@ public class BeanObjectFactoryTest {
         Object object = factory.getBean("oneParaCtor");
         assertThat(object.getClass().equals(OneParaCtor.class), is(true));
         assertThat(((OneParaCtor)object).getAnnotatedNoParaCtor().getClass().equals(AnnotatedNoParaCtor.class), is(true));
+    }
+
+    @Test
+    public void shouldGetBeanObejctWithTwoConstructorArguments() throws Exception {
+        BeanDescriptor noParaDescriptor = new BeanDescriptor();
+        noParaDescriptor.setId("noParaCtor");
+        noParaDescriptor.setClazz(AnnotatedNoParaCtor.class);
+
+        ConstructorArgumentDescriptor firstArgumentDescriptor = new ConstructorArgumentDescriptor();
+        firstArgumentDescriptor.setBeanId("noParaCtor");
+
+        BeanDescriptor oneParaDescriptor = new BeanDescriptor();
+        oneParaDescriptor.setId("oneParaCtor");
+        oneParaDescriptor.setClazz(OneParaCtor.class);
+        oneParaDescriptor.getConstructorDependency().add(firstArgumentDescriptor);
+
+        ConstructorArgumentDescriptor secondArgumentDescriptor = new ConstructorArgumentDescriptor();
+        secondArgumentDescriptor.setBeanId("oneParaCtor");
+
+        BeanDescriptor twoParaDescriptor = new BeanDescriptor();
+        twoParaDescriptor.setId("twoParaCtor");
+        twoParaDescriptor.setClazz(TwoParaCtor.class);
+        twoParaDescriptor.getConstructorDependency().add(firstArgumentDescriptor);
+        twoParaDescriptor.getConstructorDependency().add(secondArgumentDescriptor);
+
+
+        List<BeanDescriptor> beanDescriptors = new ArrayList<>();
+        beanDescriptors.add(noParaDescriptor);
+        beanDescriptors.add(oneParaDescriptor);
+        beanDescriptors.add(twoParaDescriptor);
+
+
+        BeanObjectFactory factory = new BeanObjectFactory(beanDescriptors);
+        Object object = factory.getBean("twoParaCtor");
+        assertThat(object.getClass().equals(TwoParaCtor.class), is(true));
+        assertThat(((TwoParaCtor)object).getAnnotatedNoParaCtor().getClass().equals(AnnotatedNoParaCtor.class), is(true));
+        assertThat(((TwoParaCtor)object).getOneParaCtor().getClass().equals(OneParaCtor.class), is(true));
     }
 }
