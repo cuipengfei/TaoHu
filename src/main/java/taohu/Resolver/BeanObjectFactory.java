@@ -44,13 +44,13 @@ public class BeanObjectFactory {
             }
 
         } catch (NoSuchMethodException e) {
-            throw new BeanInitializationException("Could not find such method to create bean", e);
+            throw new BeanInitializationException("Could not find such method to create bean: " + e.getMessage(), e);
         } catch (InstantiationException e) {
-            throw new BeanInitializationException("Could not create bean", e);
+            throw new BeanInitializationException("Could not create bean: " + e.getMessage(), e);
         } catch (IllegalAccessException e) {
-            throw new BeanInitializationException("Could access such method to create bean", e);
+            throw new BeanInitializationException("Could access such method to create bean: " + e.getMessage(), e);
         } catch (InvocationTargetException e) {
-            throw new BeanInitializationException("Could not create bean", e);
+            throw new BeanInitializationException("Could not create bean: " + e.getMessage(), e);
         }
     }
 
