@@ -26,26 +26,21 @@ public class BeanObjectFactory {
     public Object getBean(String beanId) throws BeanInitializationException {
         BeanDescriptor beanDescriptor = beanDescriptors.get(beanId);
 
-        Object object = null;
         try {
             Constructor constructor = null;
+            if (hasConstructorArguments(beanDescriptor)) {
 
-            if (beanDescriptor.getConstructorDependency() != null && beanDescriptor.getConstructorDependency().size() > 0) {
                 List<Class> argumentTypes = new ArrayList<>();
                 List<Object> argumentObjects = new ArrayList<>();
-                for (ConstructorArgumentDescriptor argumentDescriptor : beanDescriptor.getConstructorDependency()) {
-                    String argumentBeanId = argumentDescriptor.getBeanId();
-                    BeanDescriptor argumentBeanDescriptor = beanDescriptors.get(argumentBeanId);
-                    argumentTypes.add(argumentBeanDescriptor.getClazz());
-                    Object argumentObject = this.getBean(argumentBeanId);
-                    argumentObjects.add(argumentObject);
-                }
+                setArgumentsTypeAndInstance(beanDescriptor, argumentTypes, argumentObjects);
+
                 Class[] argTypes = new Class[argumentTypes.size()];
                 constructor = beanDescriptor.getClazz().getConstructor(argumentTypes.toArray(argTypes));
-                object = constructor.newInstance(argumentObjects.toArray());
+
+                return constructor.newInstance(argumentObjects.toArray());
             } else {
                 constructor = beanDescriptor.getClazz().getConstructor();
-                object = constructor.newInstance();
+                return constructor.newInstance();
             }
 
         } catch (NoSuchMethodException e) {
@@ -57,6 +52,21 @@ public class BeanObjectFactory {
         } catch (InvocationTargetException e) {
             throw new BeanInitializationException("Could not create bean", e);
         }
-        return object;
+    }
+
+    private boolean hasConstructorArguments(BeanDescriptor beanDescriptor) {
+        return beanDescriptor.getConstructorDependency() != null && beanDescriptor.getConstructorDependency().size() > 0;
+    }
+
+    private void setArgumentsTypeAndInstance(BeanDescriptor beanDescriptor, List<Class> argumentTypes,
+                                             List<Object> argumentObjects) throws BeanInitializationException {
+        for (ConstructorArgumentDescriptor argumentDescriptor : beanDescriptor.getConstructorDependency()) {
+            String argumentBeanId = argumentDescriptor.getBeanId();
+            BeanDescriptor argumentBeanDescriptor = beanDescriptors.get(argumentBeanId);
+            Object argumentObject = this.getBean(argumentBeanId);
+
+            argumentTypes.add(argumentBeanDescriptor.getClazz());
+            argumentObjects.add(argumentObject);
+        }
     }
 }

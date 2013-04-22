@@ -89,5 +89,7 @@ public class BeanObjectFactoryTest {
         assertThat(object.getClass().equals(TwoParaCtor.class), is(true));
         assertThat(((TwoParaCtor)object).getAnnotatedNoParaCtor().getClass().equals(AnnotatedNoParaCtor.class), is(true));
         assertThat(((TwoParaCtor)object).getOneParaCtor().getClass().equals(OneParaCtor.class), is(true));
+        assertThat(((TwoParaCtor)object).getOneParaCtor().getAnnotatedNoParaCtor().getClass()
+                .equals(AnnotatedNoParaCtor.class), is(true));
     }
 }
