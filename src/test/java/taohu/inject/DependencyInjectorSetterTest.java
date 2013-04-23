@@ -1,17 +1,36 @@
 package taohu.inject;
 
+import org.junit.Before;
 import org.junit.Test;
 import taohu.inject.ctor.NoParaCtor;
+import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.setter.*;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
 public class DependencyInjectorSetterTest {
+
+    private DependencyInjector dependencyInjector;
+
+    @Before
+    public void setUp(){
+        this.dependencyInjector = new DependencyInjector(new BeanConfigurationResolver() {
+            @Override
+            public Class<?> getBeanClass(String beanId) {
+                return null;
+            }
+
+            @Override
+            public boolean containsBean(Class<?> clazz) {
+                return true;
+            }
+        });
+    }
+
     @Test
     public void shouldCallSetterWithInjectAndProvidePara()
             throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInject"));
 
         assertThat((SetterWithInject) instance, isA(SetterWithInject.class));
@@ -21,7 +40,6 @@ public class DependencyInjectorSetterTest {
     @Test
     public void shouldCallMultiParameteredSetterWithInjectAndProvideParameters()
             throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInject"));
 
         assertThat((SetterWithInject) instance, isA(SetterWithInject.class));
@@ -32,7 +50,6 @@ public class DependencyInjectorSetterTest {
     @Test
     public void shouldNotCallSetterWithoutInject()
             throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.SetterWithoutInject"));
 
         assertThat((SetterWithoutInject) instance, isA(SetterWithoutInject.class));
@@ -41,7 +58,6 @@ public class DependencyInjectorSetterTest {
 
     @Test
     public void shouldNotCallMethodWithTypePara() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInjectAndItsOwnTypePara"));
 
         assertThat(((SetterWithInjectAndItsOwnTypePara) instance).getStr(), nullValue());
@@ -49,7 +65,6 @@ public class DependencyInjectorSetterTest {
 
     @Test
     public void shouldCallMethodWithTypeParaOfItsClass() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInjectAndTypeParaFromItClass"));
 
         assertThat(((SetterWithInjectAndTypeParaFromItClass) instance).getStr(), is("method called"));
@@ -57,7 +72,6 @@ public class DependencyInjectorSetterTest {
 
     @Test
     public void shouldCallPrivateSetter() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.PvtSetter"));
 
         assertThat(((PvtSetter) instance).getNoParaCtor(), isA(NoParaCtor.class));
@@ -65,7 +79,6 @@ public class DependencyInjectorSetterTest {
 
     @Test
     public void shouldCallStaticSetter() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.StaticSetter"));
 
         assertThat(((StaticSetter) instance).getNoParaCtor(), isA(NoParaCtor.class));

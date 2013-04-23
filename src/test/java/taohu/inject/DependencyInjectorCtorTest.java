@@ -1,9 +1,11 @@
 package taohu.inject;
 
+import org.junit.Before;
 import org.junit.Test;
 import taohu.inject.ctor.*;
 import taohu.inject.exception.IllegalAnnotationQuantityException;
 import taohu.inject.exception.LackOfAnnotationException;
+import taohu.inject.interfaces.BeanConfigurationResolver;
 
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -11,10 +13,27 @@ import static org.junit.Assert.assertThat;
 
 public class DependencyInjectorCtorTest {
 
+
+    private DependencyInjector dependencyInjector;
+
+    @Before
+    public void setUp(){
+        this.dependencyInjector = new DependencyInjector(new BeanConfigurationResolver() {
+            @Override
+            public Class<?> getBeanClass(String beanId) {
+                return null;
+            }
+
+            @Override
+            public boolean containsBean(Class<?> clazz) {
+                return true;
+            }
+        });
+    }
+
     @Test
     public void shouldCreateInstanceOfAClassWithAParameterlessConstructorWithInjectAnnotation
             () throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.ctor.AnnotatedNoParaCtor"));
 
         assertThat((AnnotatedNoParaCtor) instance, isA(AnnotatedNoParaCtor.class));
@@ -23,7 +42,7 @@ public class DependencyInjectorCtorTest {
     @Test
     public void shouldCreateInstanceOfAClassWithOneParaConstructor
             () throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
+
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.ctor.OneParaCtor"));
 
         assertThat((OneParaCtor) instance, isA(OneParaCtor.class));
@@ -33,7 +52,6 @@ public class DependencyInjectorCtorTest {
     @Test
     public void shouldCreateInstanceOfAClassWithTwoParaConstructor
             () throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.ctor.TwoParaCtor"));
 
         assertThat((TwoParaCtor) instance, isA(TwoParaCtor.class));
@@ -43,7 +61,6 @@ public class DependencyInjectorCtorTest {
 
     @Test
     public void shouldCreateInstanceOfAClassWithDefaultConstructorWithoutInjectAnnotation() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.ctor.NoParaCtor"));
 
         assertThat((NoParaCtor) instance, isA(NoParaCtor.class));
@@ -51,19 +68,16 @@ public class DependencyInjectorCtorTest {
 
     @Test(expected = LackOfAnnotationException.class)
     public void shouldThrowExceptionWhenOnlyCtorWithParameterIsNotAnnotated() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         dependencyInjector.createBeanObject(Class.forName("taohu.inject.ctor.OneParaCtorWithoutAnnotation"));
     }
 
     @Test(expected = LackOfAnnotationException.class)
     public void shouldThrowExceptionWhenBothCtorsAreNotAnnotated() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         dependencyInjector.createBeanObject(Class.forName("taohu.inject.ctor.TwoCtorsWithoutAnnotation"));
     }
 
     @Test
     public void shouldCallTheAnnotatedCtorWhenThereAreTwoCtors() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.ctor.TwoCtorsOneParaLessWithOneAnnotation"));
         assertThat((TwoCtorsOneParaLessWithOneAnnotation) instance, isA(TwoCtorsOneParaLessWithOneAnnotation.class));
         assertThat(((TwoCtorsOneParaLessWithOneAnnotation) instance).getAnnotatedNoParaCtor(), isA(AnnotatedNoParaCtor.class));
@@ -71,7 +85,6 @@ public class DependencyInjectorCtorTest {
 
     @Test
     public void shouldCreateInstanceOfAClassWithTwoConstructorsOneAnnotation() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.ctor.TwoCtorsWithOneAnnotation"));
         assertThat((TwoCtorsWithOneAnnotation) instance, isA(TwoCtorsWithOneAnnotation.class));
         assertThat(((TwoCtorsWithOneAnnotation) instance).getAnnotatedNoParaCtor(), nullValue());
@@ -80,13 +93,11 @@ public class DependencyInjectorCtorTest {
 
     @Test(expected = IllegalAnnotationQuantityException.class)
     public void shouldThrowExceptionWhenTwoCtorsAreAnnotated() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         dependencyInjector.createBeanObject(Class.forName("taohu.inject.ctor.TwoCtorsWithTwoAnnotations"));
     }
 
     @Test
     public void shouldCallPrivateCtor() throws Exception {
-        DependencyInjector dependencyInjector = new DependencyInjector();
         Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.ctor.PvtCtor"));
         assertThat((PvtCtor) instance, isA(PvtCtor.class));
     }

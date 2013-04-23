@@ -4,7 +4,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import taohu.inject.exception.BeanNotRegisteredToCreateException;
 import taohu.inject.exception.LackOfAnnotationException;
+import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.interfaces.BeanObjectCreator;
 
 import javax.annotation.Nullable;
@@ -14,8 +16,18 @@ import java.util.List;
 
 public class DependencyInjector implements BeanObjectCreator{
 
+    private BeanConfigurationResolver beanConfigurationResolver;
+
+    public DependencyInjector(BeanConfigurationResolver beanConfigurationResolver) {
+        this.beanConfigurationResolver = beanConfigurationResolver;
+    }
+
     @Override
     public Object createBeanObject(Class<?> clazz) throws Exception{
+
+        if(!beanConfigurationResolver.containsBean(clazz)){
+            throw new BeanNotRegisteredToCreateException("This class is not registered to create instance, please config xml first.");
+        }
 
         Constructor<?> constructor = getSuitableConstructor(clazz);
 
