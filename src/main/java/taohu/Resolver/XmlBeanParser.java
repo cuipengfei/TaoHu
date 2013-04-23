@@ -6,8 +6,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import taohu.model.BeanDescriptor;
-import taohu.model.ConstructorArgumentDescriptor;
-import taohu.model.PropertyDescriptor;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
@@ -22,9 +20,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class XmlBeanParser {
 
@@ -51,19 +47,16 @@ public class XmlBeanParser {
         for (int idx = 0; idx < nodeList.getLength(); idx++) {
             Node node = nodeList.item(idx);
 
-            BeanDescriptor descriptor = new BeanDescriptor();
-
-            parseAttribute(node.getAttributes(), descriptor);
-
-            beans.add(descriptor);
+            beans.add(createBeanDescriptor(node.getAttributes()));
         }
 
         return beans;
     }
 
-    private void parseAttribute(NamedNodeMap attributeMap, BeanDescriptor descriptor) throws ClassNotFoundException {
-        descriptor.setId(attributeMap.getNamedItem("id").getNodeValue());
-        descriptor.setClazz(Class.forName(attributeMap.getNamedItem("class").getNodeValue()));
+    private BeanDescriptor createBeanDescriptor(NamedNodeMap attributeMap) throws ClassNotFoundException {
+        String beanId = attributeMap.getNamedItem("id").getNodeValue();
+        Class<?> beanClass = Class.forName(attributeMap.getNamedItem("class").getNodeValue());
+        return new BeanDescriptor(beanId, beanClass);
     }
 
     private void validateXML() throws SAXException, IOException {

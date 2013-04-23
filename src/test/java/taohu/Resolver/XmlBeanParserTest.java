@@ -32,11 +32,11 @@ public class XmlBeanParserTest {
         assertThat(beans.size(), is(2));
 
         BeanDescriptor firstBean = beans.get(0);
-        assertThat(firstBean.getId(), is("first"));
+        assertThat(firstBean.getBeanId(), is("first"));
         assertThat(firstBean.getClazz().equals(NoParaCtor.class), is(true));
 
         BeanDescriptor secondBean = beans.get(1);
-        assertThat(secondBean.getId(), is("second"));
+        assertThat(secondBean.getBeanId(), is("second"));
         assertThat(secondBean.getClazz().equals(OneParaCtor.class), is(true));
     }
 }
