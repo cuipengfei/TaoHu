@@ -11,7 +11,7 @@ public class TCKTest {
 
     @Test
     public void testCar() throws Exception {
-        Tck.testsFor((Car) new DependencyInjector().createInstanceAndInjectDependencies(Class.forName("org.atinject.tck.auto.Convertible")),
+        Tck.testsFor((Car) new DependencyInjector().createBeanObject(Class.forName("org.atinject.tck.auto.Convertible")),
                 false, false);
     }
 }

@@ -2,5 +2,5 @@ package taohu.inject.interfaces;
 
 public interface BeanObjectCreator {
 
-    Object createBeanObject(Class<?> clazz);
+    Object createBeanObject(Class<?> clazz) throws Exception;
 }
