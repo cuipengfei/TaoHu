@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="taohu" xsi:schemaLocation="taohu bean.xsd">
-    <bean id="first" class="java.lang.String">
-        <constructor-arg ref="second"/>
 
-        <properties>
-            <property name="name" ref="second"/>
-        </properties>
-    </bean>
+    <bean id="first" class="taohu.inject.ctor.NoParaCtor"/>
 
-    <bean id="second" class="java.lang.Integer"/>
+    <bean id="second" class="taohu.inject.ctor.OneParaCtor"/>
+
 </beans>

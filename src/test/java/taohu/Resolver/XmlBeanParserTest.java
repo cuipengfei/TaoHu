@@ -2,6 +2,8 @@ package taohu.Resolver;
 
 import org.junit.Test;
 import org.xml.sax.SAXException;
+import taohu.inject.ctor.NoParaCtor;
+import taohu.inject.ctor.OneParaCtor;
 import taohu.model.BeanDescriptor;
 
 import java.net.URI;
@@ -28,15 +30,13 @@ public class XmlBeanParserTest {
 
         assertThat(beans, notNullValue());
         assertThat(beans.size(), is(2));
+
         BeanDescriptor firstBean = beans.get(0);
         assertThat(firstBean.getId(), is("first"));
-        assertThat(firstBean.getClazz().equals(String.class), is(true));
+        assertThat(firstBean.getClazz().equals(NoParaCtor.class), is(true));
 
-        assertThat(firstBean.getConstructorDependency().get(0).getBeanId(), is("second"));
-        assertThat(firstBean.getPropertyDependency().get("name").getName(), is("name"));
-        assertThat(firstBean.getPropertyDependency().get("name").getBeanId(), is("second"));
-
-        assertThat(beans.get(1).getId(), is("second"));
-        assertThat(beans.get(1).getClazz().equals(Integer.class), is(true));
+        BeanDescriptor secondBean = beans.get(1);
+        assertThat(secondBean.getId(), is("second"));
+        assertThat(secondBean.getClazz().equals(OneParaCtor.class), is(true));
     }
 }

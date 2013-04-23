@@ -55,50 +55,10 @@ public class XmlBeanParser {
 
             parseAttribute(node.getAttributes(), descriptor);
 
-            parseSubElement(node.getChildNodes(), descriptor);
-
             beans.add(descriptor);
         }
 
         return beans;
-    }
-
-    private void parseSubElement(NodeList childNodeList, BeanDescriptor descriptor) {
-
-        for (int subIdx = 0; subIdx < childNodeList.getLength(); subIdx++) {
-            Node childNode = childNodeList.item(subIdx);
-            if(childNode.getNodeName().equals("constructor-arg")){
-                descriptor.getConstructorDependency().add(generateContructorArgument(childNode));
-            }
-
-            if(childNode.getNodeName().equals("properties")){
-                descriptor.setPropertyDependency(generatePropertiesDescriptor(childNode));
-            }
-        }
-    }
-
-    private Map<String, PropertyDescriptor> generatePropertiesDescriptor(Node node) {
-        NodeList childNodeList = node.getChildNodes();
-        Map<String, PropertyDescriptor> propertiesDescriptor = new HashMap<>();
-
-        for (int idx = 0; idx < childNodeList.getLength(); idx++) {
-            Node item = childNodeList.item(idx);
-            if(item.getNodeName().equals("property")){
-                NamedNodeMap attributes = item.getAttributes();
-                PropertyDescriptor pd = new PropertyDescriptor();
-                pd.setName(attributes.getNamedItem("name").getNodeValue());
-                pd.setBeanId(attributes.getNamedItem("ref").getNodeValue());
-                propertiesDescriptor.put(pd.getName(), pd);
-            }
-        }
-        return propertiesDescriptor;
-    }
-
-    private ConstructorArgumentDescriptor generateContructorArgument(Node childNode) {
-        String beanId = childNode.getAttributes().getNamedItem("ref").getNodeValue();
-        ConstructorArgumentDescriptor constructorArgumentDescriptor = new ConstructorArgumentDescriptor();
-        constructorArgumentDescriptor.setBeanId(beanId);
-        return constructorArgumentDescriptor;
     }
 
     private void parseAttribute(NamedNodeMap attributeMap, BeanDescriptor descriptor) throws ClassNotFoundException {
