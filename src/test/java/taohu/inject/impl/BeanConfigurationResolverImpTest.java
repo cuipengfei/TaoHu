@@ -34,4 +34,12 @@ public class BeanConfigurationResolverImpTest {
         assertThat(shouldContain, is(true));
         assertThat(shouldNotContain, is(false));
     }
+
+    @Test
+    public void shouldReturnBeanClass(){
+        BeanConfigurationResolver resolver = new BeanConfigurationResolverImp(this.beanDescriptors);
+        Class clazz = resolver.getBeanClass("onePara");
+
+        assertThat(clazz.equals(OneParaCtor.class), is(true));
+    }
 }

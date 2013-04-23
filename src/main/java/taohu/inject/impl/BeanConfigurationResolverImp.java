@@ -18,6 +18,18 @@ public class BeanConfigurationResolverImp implements BeanConfigurationResolver {
     }
 
     @Override
+    public Class<?> getBeanClass(final String beanId) {
+        BeanDescriptor beanDescriptor = Iterables.find(beanDescriptors, new Predicate<BeanDescriptor>() {
+            @Override
+            public boolean apply(@Nullable BeanDescriptor input) {
+                return input.getBeanId().equals(beanId);
+            }
+        });
+
+        return beanDescriptor == null ? null : beanDescriptor.getClazz();
+    }
+
+    @Override
     public boolean containsBean(final Class<?> clazz) {
         boolean any = Iterables.any(beanDescriptors, new Predicate<BeanDescriptor>() {
             @Override
