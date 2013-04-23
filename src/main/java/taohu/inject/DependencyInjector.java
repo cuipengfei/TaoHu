@@ -12,9 +12,9 @@ import java.lang.reflect.*;
 import java.util.List;
 
 public class DependencyInjector {
-    public Object createInstanceAndInjectDependencies(String className)
+
+    public Object createInstanceAndInjectDependencies(Class<?> clazz)
             throws Exception {
-        Class<?> clazz = Class.forName(className);
         Constructor<?> constructor = getSuitableConstructor(clazz);
 
         Object instance = injectConstructor(constructor);
@@ -137,7 +137,7 @@ public class DependencyInjector {
             public Object apply(@Nullable Class<?> instanceType) {
                 String typeName = instanceType.getName();
                 try {
-                    return createInstanceAndInjectDependencies(typeName);
+                    return DependencyInjector.this.createInstanceAndInjectDependencies(Class.forName(typeName));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

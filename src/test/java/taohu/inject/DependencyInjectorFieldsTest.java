@@ -15,7 +15,7 @@ public class DependencyInjectorFieldsTest {
     @Test
     public void shouldSetPublicField() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.field.PublicField");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies(Class.forName("taohu.inject.field.PublicField"));
 
         assertThat(((PublicField) instance).noParaCtor, isA(NoParaCtor.class));
     }
@@ -23,7 +23,7 @@ public class DependencyInjectorFieldsTest {
     @Test
     public void shouldSetPrivateField() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.field.PvtField");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies(Class.forName("taohu.inject.field.PvtField"));
 
         assertThat(((PvtField) instance).getNoParaCtor(), isA(NoParaCtor.class));
     }
@@ -31,7 +31,7 @@ public class DependencyInjectorFieldsTest {
     @Test
     public void shouldNotSetFinalField() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.field.FinalField");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies(Class.forName("taohu.inject.field.FinalField"));
 
         assertThat(((FinalField) instance).noParaCtor, nullValue());
     }
@@ -39,7 +39,7 @@ public class DependencyInjectorFieldsTest {
     @Test
     public void shouldSetStaticField() throws Exception {
         DependencyInjector dependencyInjector = new DependencyInjector();
-        Object instance = dependencyInjector.createInstanceAndInjectDependencies("taohu.inject.field.StaticField");
+        Object instance = dependencyInjector.createInstanceAndInjectDependencies(Class.forName("taohu.inject.field.StaticField"));
 
         assertThat(((StaticField) instance).noParaCtor, isA(NoParaCtor.class));
     }
