@@ -1,6 +1,5 @@
 package taohu.Resolver;
 
-import taohu.inject.DependencyInjector;
 import taohu.inject.exception.BeanInitializationException;
 import taohu.model.BeanDescriptor;
 

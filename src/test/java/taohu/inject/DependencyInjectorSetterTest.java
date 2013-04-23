@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import taohu.inject.ctor.NoParaCtor;
 import taohu.inject.interfaces.BeanConfigurationResolver;
+import taohu.inject.interfaces.BeanObjectCreator;
 import taohu.inject.interfaces.BeanObjectStock;
 import taohu.inject.setter.*;
 
@@ -15,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 public class DependencyInjectorSetterTest {
 
-    private static DependencyInjector dependencyInjector;
+    private static BeanObjectCreator beanObjectCreator;
 
     private static BeanObjectStock beanObjectStock;
 
@@ -27,7 +28,7 @@ public class DependencyInjectorSetterTest {
 
         beanObjectStock = mock(BeanObjectStock.class);
 
-        dependencyInjector = new DependencyInjector(beanConfigurationResolver, beanObjectStock);
+        beanObjectCreator = new BeanObjectCreatorImpl(beanConfigurationResolver, beanObjectStock);
     }
 
     @Test
@@ -36,7 +37,7 @@ public class DependencyInjectorSetterTest {
         NoParaCtor noParaCtor = new NoParaCtor();
         when(beanObjectStock.getBeanObject(NoParaCtor.class)).thenReturn(noParaCtor);
 
-        Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInject"));
+        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInject"));
 
         assertThat((SetterWithInject) instance, isA(SetterWithInject.class));
         assertThat(((SetterWithInject) instance).getNoParaCtor(), is(noParaCtor));
@@ -48,7 +49,7 @@ public class DependencyInjectorSetterTest {
         NoParaCtor noParaCtor = new NoParaCtor();
         when(beanObjectStock.getBeanObject(NoParaCtor.class)).thenReturn(noParaCtor);
 
-        Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInject"));
+        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInject"));
 
         assertThat((SetterWithInject) instance, isA(SetterWithInject.class));
         assertThat(((SetterWithInject) instance).getNoParaCtor2(), is(noParaCtor));
@@ -58,7 +59,7 @@ public class DependencyInjectorSetterTest {
     @Test
     public void shouldNotCallSetterWithoutInject()
             throws Exception {
-        Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.SetterWithoutInject"));
+        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.SetterWithoutInject"));
 
         assertThat((SetterWithoutInject) instance, isA(SetterWithoutInject.class));
         assertThat(((SetterWithoutInject) instance).getNoParaCtor(), nullValue());
@@ -66,14 +67,14 @@ public class DependencyInjectorSetterTest {
 
     @Test
     public void shouldNotCallMethodWithTypePara() throws Exception {
-        Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInjectAndItsOwnTypePara"));
+        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInjectAndItsOwnTypePara"));
 
         assertThat(((SetterWithInjectAndItsOwnTypePara) instance).getStr(), nullValue());
     }
 
     @Test
     public void shouldCallMethodWithTypeParaOfItsClass() throws Exception {
-        Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInjectAndTypeParaFromItClass"));
+        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInjectAndTypeParaFromItClass"));
 
         assertThat(((SetterWithInjectAndTypeParaFromItClass) instance).getStr(), is("method called"));
     }
@@ -83,7 +84,7 @@ public class DependencyInjectorSetterTest {
         NoParaCtor noParaCtor = new NoParaCtor();
         when(beanObjectStock.getBeanObject(NoParaCtor.class)).thenReturn(noParaCtor);
 
-        Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.PvtSetter"));
+        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.PvtSetter"));
 
         assertThat(((PvtSetter) instance).getNoParaCtor(), is(noParaCtor));
     }
@@ -93,7 +94,7 @@ public class DependencyInjectorSetterTest {
         NoParaCtor noParaCtor = new NoParaCtor();
         when(beanObjectStock.getBeanObject(NoParaCtor.class)).thenReturn(noParaCtor);
 
-        Object instance = dependencyInjector.createBeanObject(Class.forName("taohu.inject.setter.StaticSetter"));
+        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.StaticSetter"));
 
 
         assertThat(((StaticSetter) instance).getNoParaCtor(), is(noParaCtor));

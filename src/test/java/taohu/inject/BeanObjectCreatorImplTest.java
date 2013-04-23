@@ -5,6 +5,7 @@ import taohu.inject.ctor.NoParaCtor;
 import taohu.inject.exception.BeanNotRegisteredToCreateException;
 import taohu.inject.impl.BeanConfigurationResolverImp;
 import taohu.inject.interfaces.BeanConfigurationResolver;
+import taohu.inject.interfaces.BeanObjectCreator;
 import taohu.model.BeanDescriptor;
 
 import java.util.ArrayList;
@@ -13,14 +14,14 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class DependencyInjectorTest {
+public class BeanObjectCreatorImplTest {
 
     @Test(expected = BeanNotRegisteredToCreateException.class)
     public void shouldNotCreateInstanceIfClassIsNotRegistered() throws Exception {
         BeanConfigurationResolver resolver = new BeanConfigurationResolverImp(new ArrayList<BeanDescriptor>());
 
-        DependencyInjector dependencyInjector = new DependencyInjector(resolver, null);
-        dependencyInjector.createBeanObject(String.class);
+        BeanObjectCreator beanObjectCreatorImpl = new BeanObjectCreatorImpl(resolver, null);
+        beanObjectCreatorImpl.createBeanObject(String.class);
     }
 
     @Test
@@ -30,8 +31,8 @@ public class DependencyInjectorTest {
         beanDescriptors.add(descriptor);
         BeanConfigurationResolver resolver = new BeanConfigurationResolverImp(beanDescriptors);
 
-        DependencyInjector dependencyInjector = new DependencyInjector(resolver, null);
-        Object beanObject = dependencyInjector.createBeanObject(NoParaCtor.class);
+        BeanObjectCreator beanObjectCreator = new BeanObjectCreatorImpl(resolver, null);
+        Object beanObject = beanObjectCreator.createBeanObject(NoParaCtor.class);
 
         assertThat(beanObject.getClass().equals(NoParaCtor.class), is(true));
     }

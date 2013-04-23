@@ -15,12 +15,12 @@ import javax.inject.Inject;
 import java.lang.reflect.*;
 import java.util.List;
 
-public class DependencyInjector implements BeanObjectCreator{
+public class BeanObjectCreatorImpl implements BeanObjectCreator{
 
     private BeanConfigurationResolver beanConfigurationResolver;
     private BeanObjectStock beanObjectStock;
 
-    public DependencyInjector(BeanConfigurationResolver beanConfigurationResolver, BeanObjectStock beanObjectStock) {
+    public BeanObjectCreatorImpl(BeanConfigurationResolver beanConfigurationResolver, BeanObjectStock beanObjectStock) {
         this.beanConfigurationResolver = beanConfigurationResolver;
         this.beanObjectStock = beanObjectStock;
     }
