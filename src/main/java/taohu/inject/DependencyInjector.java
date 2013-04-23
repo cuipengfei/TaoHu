@@ -8,6 +8,7 @@ import taohu.inject.exception.BeanNotRegisteredToCreateException;
 import taohu.inject.exception.LackOfAnnotationException;
 import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.interfaces.BeanObjectCreator;
+import taohu.inject.interfaces.BeanObjectStock;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -17,9 +18,11 @@ import java.util.List;
 public class DependencyInjector implements BeanObjectCreator{
 
     private BeanConfigurationResolver beanConfigurationResolver;
+    private BeanObjectStock beanObjectStock;
 
-    public DependencyInjector(BeanConfigurationResolver beanConfigurationResolver) {
+    public DependencyInjector(BeanConfigurationResolver beanConfigurationResolver, BeanObjectStock beanObjectStock) {
         this.beanConfigurationResolver = beanConfigurationResolver;
+        this.beanObjectStock = beanObjectStock;
     }
 
     @Override
@@ -149,9 +152,8 @@ public class DependencyInjector implements BeanObjectCreator{
         return Lists.transform(Lists.newArrayList(instanceTypes), new Function<Class<?>, Object>() {
             @Override
             public Object apply(@Nullable Class<?> instanceType) {
-                String typeName = instanceType.getName();
                 try {
-                    return DependencyInjector.this.createBeanObject(Class.forName(typeName));
+                    return beanObjectStock.getBeanObject(instanceType);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

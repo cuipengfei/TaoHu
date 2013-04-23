@@ -19,7 +19,7 @@ public class DependencyInjectorTest {
     public void shouldNotCreateInstanceIfClassIsNotRegistered() throws Exception {
         BeanConfigurationResolver resolver = new BeanConfigurationResolverImp(new ArrayList<BeanDescriptor>());
 
-        DependencyInjector dependencyInjector = new DependencyInjector(resolver);
+        DependencyInjector dependencyInjector = new DependencyInjector(resolver, null);
         dependencyInjector.createBeanObject(String.class);
     }
 
@@ -30,7 +30,7 @@ public class DependencyInjectorTest {
         beanDescriptors.add(descriptor);
         BeanConfigurationResolver resolver = new BeanConfigurationResolverImp(beanDescriptors);
 
-        DependencyInjector dependencyInjector = new DependencyInjector(resolver);
+        DependencyInjector dependencyInjector = new DependencyInjector(resolver, null);
         Object beanObject = dependencyInjector.createBeanObject(NoParaCtor.class);
 
         assertThat(beanObject.getClass().equals(NoParaCtor.class), is(true));

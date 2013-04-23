@@ -25,7 +25,7 @@ public class TCKTest {
             public boolean containsBean(Class<?> clazz) {
                 return true;
             }
-        });
+        }, null);
     }
 
     @Test
