@@ -1,6 +1,7 @@
 package taohu.inject;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import taohu.inject.ctor.*;
 import taohu.inject.exception.IllegalAnnotationQuantityException;
@@ -10,25 +11,22 @@ import taohu.inject.interfaces.BeanConfigurationResolver;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DependencyInjectorCtorTest {
 
 
-    private DependencyInjector dependencyInjector;
+    private static DependencyInjector dependencyInjector;
 
-    @Before
-    public void setUp(){
-        this.dependencyInjector = new DependencyInjector(new BeanConfigurationResolver() {
-            @Override
-            public Class<?> getBeanClass(String beanId) {
-                return null;
-            }
+    @BeforeClass
+    public static void setUp() {
 
-            @Override
-            public boolean containsBean(Class<?> clazz) {
-                return true;
-            }
-        });
+        BeanConfigurationResolver beanConfigurationResolver = mock(BeanConfigurationResolver.class);
+        when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
+
+        dependencyInjector = new DependencyInjector(beanConfigurationResolver);
     }
 
     @Test
