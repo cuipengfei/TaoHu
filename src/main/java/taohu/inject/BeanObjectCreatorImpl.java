@@ -5,26 +5,57 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import taohu.inject.exception.LackOfAnnotationException;
-import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.interfaces.BeanObjectCreator;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class BeanObjectCreatorImpl implements BeanObjectCreator{
+public class BeanObjectCreatorImpl implements BeanObjectCreator {
+
+    private Map<Class, Object> objectCache = new HashMap<>();
 
     @Override
-    public Object createBeanObject(Class<?> clazz) throws Exception{
+    public Object createBeanObject(Class<?> clazz) throws Exception {
 
-        Constructor<?> constructor = getSuitableConstructor(clazz);
+        Object instance = null;
+        boolean isSingleton = isSingleton(clazz);
+        if (isSingleton) {
+            instance = getFromCache(clazz);
+        }
 
-        Object instance = injectConstructor(constructor);
-        injectFields(instance, clazz);
-        injectSetters(instance, clazz);
+        if (instance == null) {
+            Constructor<?> constructor = getSuitableConstructor(clazz);
+
+            instance = injectConstructor(constructor);
+            injectFields(instance, clazz);
+            injectSetters(instance, clazz);
+        }
+
+        if (isSingleton) {
+            this.objectCache.put(clazz, instance);
+        }
 
         return instance;
+    }
+
+    private Object getFromCache(Class<?> clazz) {
+        return objectCache.get(clazz);
+    }
+
+    private boolean isSingleton(Class<?> clazz) {
+        Annotation[] annotations = clazz.getAnnotations();
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType().equals(Singleton.class)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Object injectConstructor(Constructor<?> constructor) throws InstantiationException, IllegalAccessException, InvocationTargetException {
