@@ -23,16 +23,27 @@ public class BeanObjectCreatorImpl implements BeanObjectCreator {
     private Map<Class, Object> objectCache = new HashMap<>();
     private BeanConfigurationResolver beanConfigurationResolver;
 
-    public BeanObjectCreatorImpl(BeanConfigurationResolver beanConfigurationResolver){
+    public BeanObjectCreatorImpl(BeanConfigurationResolver beanConfigurationResolver) {
 
         this.beanConfigurationResolver = beanConfigurationResolver;
     }
 
     @Override
+    public Object createBeanObject(String beanId) throws Exception {
+        Class beanClass = beanConfigurationResolver.getBeanClass(beanId);
+
+        if (beanClass == null) {
+            throw new BeanNotRegisteredToCreateException("This bean is not defined in xml: " + beanId);
+        }
+
+        return this.createBeanObject(beanClass);
+    }
+
+    @Override
     public Object createBeanObject(Class<?> clazz) throws Exception {
 
-        if(!beanConfigurationResolver.containsBean(clazz)) {
-            throw new BeanNotRegisteredToCreateException("This class is not registerd in xml.");
+        if (!beanConfigurationResolver.containsBean(clazz)) {
+            throw new BeanNotRegisteredToCreateException("This class is not registered in xml: " + clazz);
         }
 
         if (isSingleton(clazz)) {

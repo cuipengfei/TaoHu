@@ -2,7 +2,6 @@ package taohu.inject;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import taohu.inject.ctor.AnnotatedNoParaCtor;
 import taohu.inject.ctor.OneParaCtor;
 import taohu.inject.exception.BeanNotRegisteredToCreateException;
@@ -24,7 +23,7 @@ public class BeanObjectCreatorImplTest {
     private BeanObjectCreator creator;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         this.beanConfigurationResolver = mock(BeanConfigurationResolver.class);
         when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
         this.creator = new BeanObjectCreatorImpl(beanConfigurationResolver);
