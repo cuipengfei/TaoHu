@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import taohu.inject.ctor.AnnotatedNoParaCtor;
 import taohu.inject.ctor.OneParaCtor;
-import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.model.BeanDescriptor;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class BeanConfigurationResolverImpTest {
 
     @Test
     public void shouldKnowContainsBeanOrNot() throws Exception {
-        BeanConfigurationResolver resolver = new BeanConfigurationResolverImp(this.beanDescriptors);
+        BeanConfigurationResolverImp resolver = new BeanConfigurationResolverImp(this.beanDescriptors);
         boolean shouldContain = resolver.containsBean(OneParaCtor.class);
         boolean shouldNotContain = resolver.containsBean(AnnotatedNoParaCtor.class);
 
@@ -37,7 +36,7 @@ public class BeanConfigurationResolverImpTest {
 
     @Test
     public void shouldReturnBeanClass(){
-        BeanConfigurationResolver resolver = new BeanConfigurationResolverImp(this.beanDescriptors);
+        BeanConfigurationResolverImp resolver = new BeanConfigurationResolverImp(this.beanDescriptors);
         Class clazz = resolver.getBeanClass("onePara");
 
         assertThat(clazz.equals(OneParaCtor.class), is(true));

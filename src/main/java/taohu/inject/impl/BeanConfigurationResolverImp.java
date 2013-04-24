@@ -2,13 +2,12 @@ package taohu.inject.impl;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.model.BeanDescriptor;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BeanConfigurationResolverImp implements BeanConfigurationResolver {
+public class BeanConfigurationResolverImp {
 
     private List<BeanDescriptor> beanDescriptors;
 
@@ -17,7 +16,6 @@ public class BeanConfigurationResolverImp implements BeanConfigurationResolver {
         this.beanDescriptors = beanDescriptors;
     }
 
-    @Override
     public Class<?> getBeanClass(final String beanId) {
         BeanDescriptor beanDescriptor = Iterables.find(beanDescriptors, new Predicate<BeanDescriptor>() {
             @Override
@@ -29,7 +27,6 @@ public class BeanConfigurationResolverImp implements BeanConfigurationResolver {
         return beanDescriptor == null ? null : beanDescriptor.getClazz();
     }
 
-    @Override
     public boolean containsBean(final Class<?> clazz) {
         boolean any = Iterables.any(beanDescriptors, new Predicate<BeanDescriptor>() {
             @Override

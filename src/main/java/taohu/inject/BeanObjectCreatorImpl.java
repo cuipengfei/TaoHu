@@ -6,8 +6,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import taohu.inject.exception.BeanNotRegisteredToCreateException;
 import taohu.inject.exception.LackOfAnnotationException;
-import taohu.inject.interfaces.BeanConfigurationResolver;
-import taohu.inject.interfaces.BeanObjectCreator;
+import taohu.inject.impl.BeanConfigurationResolverImp;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -18,17 +17,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BeanObjectCreatorImpl implements BeanObjectCreator {
+public class BeanObjectCreatorImpl {
 
     private Map<Class, Object> objectCache = new HashMap<>();
-    private BeanConfigurationResolver beanConfigurationResolver;
+    private BeanConfigurationResolverImp beanConfigurationResolver;
 
-    public BeanObjectCreatorImpl(BeanConfigurationResolver beanConfigurationResolver) {
+    public BeanObjectCreatorImpl(BeanConfigurationResolverImp beanConfigurationResolver) {
 
         this.beanConfigurationResolver = beanConfigurationResolver;
     }
 
-    @Override
     public Object createBeanObject(String beanId) throws Exception {
         Class beanClass = beanConfigurationResolver.getBeanClass(beanId);
 
@@ -39,7 +37,6 @@ public class BeanObjectCreatorImpl implements BeanObjectCreator {
         return this.createBeanObject(beanClass);
     }
 
-    @Override
     public Object createBeanObject(Class<?> clazz) throws Exception {
 
         if (!beanConfigurationResolver.containsBean(clazz)) {
