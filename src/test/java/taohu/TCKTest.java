@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import taohu.inject.BeanObjectCreatorImpl;
-import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.interfaces.BeanObjectCreator;
 
 @Ignore
@@ -16,17 +15,7 @@ public class TCKTest {
 
     @Before
     public void setUp(){
-        this.beanObjectCreator = new BeanObjectCreatorImpl(new BeanConfigurationResolver() {
-            @Override
-            public Class<?> getBeanClass(String beanId) {
-                return null;
-            }
-
-            @Override
-            public boolean containsBean(Class<?> clazz) {
-                return true;
-            }
-        });
+        this.beanObjectCreator = new BeanObjectCreatorImpl();
     }
 
     @Test

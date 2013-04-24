@@ -27,7 +27,7 @@ public class DependencyInjectorFieldsTest {
         BeanConfigurationResolver beanConfigurationResolver = mock(BeanConfigurationResolver.class);
         when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
 
-        beanObjectCreator = new BeanObjectCreatorImpl(beanConfigurationResolver);
+        beanObjectCreator = new BeanObjectCreatorImpl();
     }
 
     @Test
