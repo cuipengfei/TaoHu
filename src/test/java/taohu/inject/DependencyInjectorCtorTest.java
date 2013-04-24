@@ -7,7 +7,6 @@ import taohu.inject.exception.IllegalAnnotationQuantityException;
 import taohu.inject.exception.LackOfAnnotationException;
 import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.interfaces.BeanObjectCreator;
-import taohu.inject.interfaces.BeanObjectStock;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -20,17 +19,14 @@ public class DependencyInjectorCtorTest {
 
     private static BeanObjectCreator beanObjectCreator;
 
-    private static BeanObjectStock beanObjectStock;
-
     @Before
     public void setUp() {
 
         BeanConfigurationResolver beanConfigurationResolver = mock(BeanConfigurationResolver.class);
-        beanObjectStock = mock(BeanObjectStock.class);
 
         when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
 
-        beanObjectCreator = new BeanObjectCreatorImpl(beanConfigurationResolver, beanObjectStock);
+        beanObjectCreator = new BeanObjectCreatorImpl(beanConfigurationResolver);
     }
 
     @Test
@@ -45,28 +41,20 @@ public class DependencyInjectorCtorTest {
     public void shouldCreateInstanceOfAClassWithOneParaConstructor
             () throws Exception {
 
-        AnnotatedNoParaCtor annotatedNoParaCtor = new AnnotatedNoParaCtor();
-        when(beanObjectStock.getBeanObject(AnnotatedNoParaCtor.class)).thenReturn(annotatedNoParaCtor);
-
         Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.ctor.OneParaCtor"));
 
         assertThat((OneParaCtor) instance, isA(OneParaCtor.class));
-        assertThat(((OneParaCtor) instance).getAnnotatedNoParaCtor(), is(annotatedNoParaCtor));
+        assertThat(((OneParaCtor) instance).getAnnotatedNoParaCtor(), isA(AnnotatedNoParaCtor.class));
     }
 
     @Test
     public void shouldCreateInstanceOfAClassWithTwoParaConstructor
             () throws Exception {
-        AnnotatedNoParaCtor annotatedNoParaCtor = new AnnotatedNoParaCtor();
-        OneParaCtor oneParaCtor = new OneParaCtor(annotatedNoParaCtor);
-        when(beanObjectStock.getBeanObject(OneParaCtor.class)).thenReturn(oneParaCtor);
-        when(beanObjectStock.getBeanObject(AnnotatedNoParaCtor.class)).thenReturn(annotatedNoParaCtor);
-
         Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.ctor.TwoParaCtor"));
 
         assertThat((TwoParaCtor) instance, isA(TwoParaCtor.class));
-        assertThat(((TwoParaCtor) instance).getAnnotatedNoParaCtor(), is(annotatedNoParaCtor));
-        assertThat(((TwoParaCtor) instance).getOneParaCtor(), is(oneParaCtor));
+        assertThat(((TwoParaCtor) instance).getAnnotatedNoParaCtor(), isA(AnnotatedNoParaCtor.class));
+        assertThat(((TwoParaCtor) instance).getOneParaCtor(), isA(OneParaCtor.class));
     }
 
     @Test
@@ -88,25 +76,18 @@ public class DependencyInjectorCtorTest {
 
     @Test
     public void shouldCallTheAnnotatedCtorWhenThereAreTwoCtors() throws Exception {
-        AnnotatedNoParaCtor annotatedNoParaCtor = new AnnotatedNoParaCtor();
-        when(beanObjectStock.getBeanObject(AnnotatedNoParaCtor.class)).thenReturn(annotatedNoParaCtor);
-
         Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.ctor.TwoCtorsOneParaLessWithOneAnnotation"));
         assertThat((TwoCtorsOneParaLessWithOneAnnotation) instance, isA(TwoCtorsOneParaLessWithOneAnnotation.class));
-        assertThat(((TwoCtorsOneParaLessWithOneAnnotation) instance).getAnnotatedNoParaCtor(), is(annotatedNoParaCtor));
+        assertThat(((TwoCtorsOneParaLessWithOneAnnotation) instance).getAnnotatedNoParaCtor(), isA(AnnotatedNoParaCtor.class));
     }
 
     @Test
     public void shouldCreateInstanceOfAClassWithTwoConstructorsOneAnnotation() throws Exception {
-        AnnotatedNoParaCtor annotatedNoParaCtor = new AnnotatedNoParaCtor();
-        OneParaCtor oneParaCtor = new OneParaCtor(annotatedNoParaCtor);
-        when(beanObjectStock.getBeanObject(OneParaCtor.class)).thenReturn(oneParaCtor);
-
         Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.ctor.TwoCtorsWithOneAnnotation"));
 
         assertThat((TwoCtorsWithOneAnnotation) instance, isA(TwoCtorsWithOneAnnotation.class));
         assertThat(((TwoCtorsWithOneAnnotation) instance).getAnnotatedNoParaCtor(), nullValue());
-        assertThat(((TwoCtorsWithOneAnnotation) instance).getOneParaCtor(), is(oneParaCtor));
+        assertThat(((TwoCtorsWithOneAnnotation) instance).getOneParaCtor(), is(OneParaCtor.class));
     }
 
     @Test(expected = IllegalAnnotationQuantityException.class)

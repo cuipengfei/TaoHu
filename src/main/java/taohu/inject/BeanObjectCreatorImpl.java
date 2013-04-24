@@ -18,11 +18,9 @@ import java.util.List;
 public class BeanObjectCreatorImpl implements BeanObjectCreator{
 
     private BeanConfigurationResolver beanConfigurationResolver;
-    private BeanObjectStock beanObjectStock;
 
-    public BeanObjectCreatorImpl(BeanConfigurationResolver beanConfigurationResolver, BeanObjectStock beanObjectStock) {
+    public BeanObjectCreatorImpl(BeanConfigurationResolver beanConfigurationResolver) {
         this.beanConfigurationResolver = beanConfigurationResolver;
-        this.beanObjectStock = beanObjectStock;
     }
 
     @Override
@@ -153,7 +151,7 @@ public class BeanObjectCreatorImpl implements BeanObjectCreator{
             @Override
             public Object apply(@Nullable Class<?> instanceType) {
                 try {
-                    return beanObjectStock.getBeanObject(instanceType);
+                    return BeanObjectCreatorImpl.this.createBeanObject(instanceType);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

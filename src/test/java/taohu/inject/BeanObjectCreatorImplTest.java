@@ -20,7 +20,7 @@ public class BeanObjectCreatorImplTest {
     public void shouldNotCreateInstanceIfClassIsNotRegistered() throws Exception {
         BeanConfigurationResolver resolver = new BeanConfigurationResolverImp(new ArrayList<BeanDescriptor>());
 
-        BeanObjectCreator beanObjectCreatorImpl = new BeanObjectCreatorImpl(resolver, null);
+        BeanObjectCreator beanObjectCreatorImpl = new BeanObjectCreatorImpl(resolver);
         beanObjectCreatorImpl.createBeanObject(String.class);
     }
 
@@ -31,7 +31,7 @@ public class BeanObjectCreatorImplTest {
         beanDescriptors.add(descriptor);
         BeanConfigurationResolver resolver = new BeanConfigurationResolverImp(beanDescriptors);
 
-        BeanObjectCreator beanObjectCreator = new BeanObjectCreatorImpl(resolver, null);
+        BeanObjectCreator beanObjectCreator = new BeanObjectCreatorImpl(resolver);
         Object beanObject = beanObjectCreator.createBeanObject(NoParaCtor.class);
 
         assertThat(beanObject.getClass().equals(NoParaCtor.class), is(true));

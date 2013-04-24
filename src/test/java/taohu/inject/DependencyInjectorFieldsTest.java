@@ -9,9 +9,9 @@ import taohu.inject.field.PvtField;
 import taohu.inject.field.StaticField;
 import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.interfaces.BeanObjectCreator;
-import taohu.inject.interfaces.BeanObjectStock;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.isA;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -21,37 +21,27 @@ public class DependencyInjectorFieldsTest {
 
     private static BeanObjectCreator beanObjectCreator;
 
-    private static BeanObjectStock beanObjectStock;
-
     @Before
     public void setUp() {
 
         BeanConfigurationResolver beanConfigurationResolver = mock(BeanConfigurationResolver.class);
         when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
 
-        beanObjectStock = mock(BeanObjectStock.class);
-
-        beanObjectCreator = new BeanObjectCreatorImpl(beanConfigurationResolver, beanObjectStock);
+        beanObjectCreator = new BeanObjectCreatorImpl(beanConfigurationResolver);
     }
 
     @Test
     public void shouldSetPublicField() throws Exception {
-        NoParaCtor noParaCtor = new NoParaCtor();
-        when(beanObjectStock.getBeanObject(NoParaCtor.class)).thenReturn(noParaCtor);
-
         Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.field.PublicField"));
 
-        assertThat(((PublicField) instance).noParaCtor, is(noParaCtor));
+        assertThat(((PublicField) instance).noParaCtor, isA(NoParaCtor.class));
     }
 
     @Test
     public void shouldSetPrivateField() throws Exception {
-        NoParaCtor noParaCtor = new NoParaCtor();
-        when(beanObjectStock.getBeanObject(NoParaCtor.class)).thenReturn(noParaCtor);
-
         Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.field.PvtField"));
 
-        assertThat(((PvtField) instance).getNoParaCtor(), is(noParaCtor));
+        assertThat(((PvtField) instance).getNoParaCtor(), isA(NoParaCtor.class));
     }
 
     @Test
@@ -63,11 +53,8 @@ public class DependencyInjectorFieldsTest {
 
     @Test
     public void shouldSetStaticField() throws Exception {
-        NoParaCtor noParaCtor = new NoParaCtor();
-        when(beanObjectStock.getBeanObject(NoParaCtor.class)).thenReturn(noParaCtor);
-
         Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.field.StaticField"));
 
-        assertThat(((StaticField) instance).noParaCtor, is(noParaCtor));
+        assertThat(((StaticField) instance).noParaCtor, isA(NoParaCtor.class));
     }
 }
