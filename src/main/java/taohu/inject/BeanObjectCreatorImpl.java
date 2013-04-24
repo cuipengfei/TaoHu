@@ -24,28 +24,32 @@ public class BeanObjectCreatorImpl implements BeanObjectCreator {
     public Object createBeanObject(Class<?> clazz) throws Exception {
 
         Object instance = null;
-        boolean isSingleton = isSingleton(clazz);
-        if (isSingleton) {
-            instance = getFromCache(clazz);
-        }
-
-        if (instance == null) {
-            Constructor<?> constructor = getSuitableConstructor(clazz);
-
-            instance = injectConstructor(constructor);
-            injectFields(instance, clazz);
-            injectSetters(instance, clazz);
-        }
-
-        if (isSingleton) {
-            this.objectCache.put(clazz, instance);
+        if (isSingleton(clazz)) {
+            instance = getFromCacheOrCreate(clazz);
+        } else {
+            instance = doCreateObject(clazz);
         }
 
         return instance;
     }
 
-    private Object getFromCache(Class<?> clazz) {
-        return objectCache.get(clazz);
+    private Object doCreateObject(Class<?> clazz) throws Exception {
+        Object instance;
+        Constructor<?> constructor = getSuitableConstructor(clazz);
+
+        instance = injectConstructor(constructor);
+        injectFields(instance, clazz);
+        injectSetters(instance, clazz);
+        return instance;
+    }
+
+    private Object getFromCacheOrCreate(Class<?> clazz) throws Exception {
+        Object obj = objectCache.get(clazz);
+        if (obj == null) {
+            obj = this.doCreateObject(clazz);
+            this.objectCache.put(clazz, obj);
+        }
+        return obj;
     }
 
     private boolean isSingleton(Class<?> clazz) {
