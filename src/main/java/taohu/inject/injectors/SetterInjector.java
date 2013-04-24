@@ -12,7 +12,13 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class SetterInjector {
-    public void injectSetters(Object instance, Class<?> clazz, BeanObjectCreator beanObjectCreator) throws InvocationTargetException, IllegalAccessException {
+    private BeanObjectCreator beanObjectCreator;
+
+    public SetterInjector(BeanObjectCreator beanObjectCreator) {
+        this.beanObjectCreator = beanObjectCreator;
+    }
+
+    public void injectSetters(Object instance, Class<?> clazz) throws InvocationTargetException, IllegalAccessException {
         Method[] methods = clazz.getDeclaredMethods();
         Iterable<Method> methodsWithInjectAndNoTypeParaOfItsOwn = Iterables.filter(Lists.newArrayList(methods), new Predicate<Method>() {
             @Override
@@ -23,11 +29,11 @@ public class SetterInjector {
         });
 
         for (Method method : methodsWithInjectAndNoTypeParaOfItsOwn) {
-            callSetter(instance, method, beanObjectCreator);
+            callSetter(instance, method);
         }
     }
 
-    private void callSetter(Object instance, Method method, BeanObjectCreator beanObjectCreator) throws IllegalAccessException, InvocationTargetException {
+    private void callSetter(Object instance, Method method) throws IllegalAccessException, InvocationTargetException {
         Class<?>[] parameterTypes = method.getParameterTypes();
         method.setAccessible(true);
         if (parameterTypes.length == 0) {

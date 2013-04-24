@@ -12,7 +12,13 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 public class FieldInjector {
-    public void injectFields(Object instance, Class<?> clazz, BeanObjectCreator beanObjectCreator) throws IllegalAccessException {
+    private BeanObjectCreator beanObjectCreator;
+
+    public FieldInjector(BeanObjectCreator beanObjectCreator) {
+        this.beanObjectCreator = beanObjectCreator;
+    }
+
+    public void injectFields(Object instance, Class<?> clazz) throws IllegalAccessException {
         Field[] fields = clazz.getDeclaredFields();
         Iterable<Field> nonFinalfieldsWithInject = Iterables.filter(Lists.newArrayList(fields), new Predicate<Field>() {
             @Override
@@ -22,11 +28,11 @@ public class FieldInjector {
             }
         });
         for (Field field : nonFinalfieldsWithInject) {
-            setField(instance, field, beanObjectCreator);
+            setField(instance, field);
         }
     }
 
-    private void setField(Object instance, Field field, BeanObjectCreator beanObjectCreator) throws IllegalAccessException {
+    private void setField(Object instance, Field field) throws IllegalAccessException {
         field.setAccessible(true);
 
         Class<?> fieldType = field.getType();

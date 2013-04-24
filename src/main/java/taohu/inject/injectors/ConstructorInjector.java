@@ -10,14 +10,22 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class ConstructorInjector {
-    public Object injectConstructor(Class<?> clazz, BeanObjectCreator beanObjectCreator)
+
+    private BeanObjectCreator beanObjectCreator;
+
+    public ConstructorInjector(BeanObjectCreator beanObjectCreator) {
+        this.beanObjectCreator = beanObjectCreator;
+    }
+
+    public Object injectConstructor(Class<?> clazz)
             throws Exception {
         Constructor suitableConstructor = getSuitableConstructor(clazz);
 
-        return injectConstructor(suitableConstructor, beanObjectCreator);
+        return injectConstructor(suitableConstructor);
     }
 
-    private Object injectConstructor(Constructor<?> constructor, BeanObjectCreator beanObjectCreator) throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    private Object injectConstructor(Constructor<?> constructor)
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
         Class<?>[] parameterTypes = constructor.getParameterTypes();
         List<Object> parameters = beanObjectCreator.getInstances(parameterTypes);
 

@@ -28,9 +28,9 @@ public class BeanObjectCreator {
         this.beanConfigurationResolver = beanConfigurationResolver;
         objectCache = new HashMap<>();
 
-        constructorInjector = new ConstructorInjector();
-        fieldInjector = new FieldInjector();
-        setterInjector = new SetterInjector();
+        constructorInjector = new ConstructorInjector(this);
+        fieldInjector = new FieldInjector(this);
+        setterInjector = new SetterInjector(this);
     }
 
     public Object createBeanObject(String beanId) throws Exception {
@@ -58,9 +58,9 @@ public class BeanObjectCreator {
 
     private Object doCreateObject(Class<?> clazz) throws Exception {
         Object instance;
-        instance = constructorInjector.injectConstructor(clazz, this);
-        fieldInjector.injectFields(instance, clazz, this);
-        setterInjector.injectSetters(instance, clazz, this);
+        instance = constructorInjector.injectConstructor(clazz);
+        fieldInjector.injectFields(instance, clazz);
+        setterInjector.injectSetters(instance, clazz);
         return instance;
     }
 
