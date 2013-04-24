@@ -6,7 +6,7 @@ public class BeanDescriptor {
 
     private Class clazz;
 
-    public BeanDescriptor(String beanId, Class clazz){
+    public BeanDescriptor(String beanId, Class clazz) {
         this.beanId = beanId;
         this.clazz = clazz;
     }

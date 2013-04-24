@@ -7,6 +7,8 @@ import taohu.model.BeanDescriptor;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static com.google.common.collect.Iterables.any;
+
 public class BeanConfigurationResolver {
 
     private List<BeanDescriptor> beanDescriptors;
@@ -28,12 +30,11 @@ public class BeanConfigurationResolver {
     }
 
     public boolean containsBean(final Class<?> clazz) {
-        boolean any = Iterables.any(beanDescriptors, new Predicate<BeanDescriptor>() {
+        return any(beanDescriptors, new Predicate<BeanDescriptor>() {
             @Override
             public boolean apply(@Nullable BeanDescriptor input) {
                 return input.getClazz().equals(clazz);
             }
         });
-        return any;
     }
 }

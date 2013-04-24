@@ -35,7 +35,7 @@ public class BeanConfigurationResolverTest {
     }
 
     @Test
-    public void shouldReturnBeanClass(){
+    public void shouldReturnBeanClass() {
         BeanConfigurationResolver resolver = new BeanConfigurationResolver(this.beanDescriptors);
         Class clazz = resolver.getBeanClass("onePara");
 

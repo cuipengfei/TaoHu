@@ -18,7 +18,7 @@ public class TCKTest {
     private BeanObjectCreator beanObjectCreator;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         BeanConfigurationResolver beanConfigurationResolver = mock(BeanConfigurationResolver.class);
         when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
         this.beanObjectCreator = new BeanObjectCreator(beanConfigurationResolver);

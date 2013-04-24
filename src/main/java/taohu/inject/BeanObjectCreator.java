@@ -23,7 +23,6 @@ public class BeanObjectCreator {
     private BeanConfigurationResolver beanConfigurationResolver;
 
     public BeanObjectCreator(BeanConfigurationResolver beanConfigurationResolver) {
-
         this.beanConfigurationResolver = beanConfigurationResolver;
     }
 
