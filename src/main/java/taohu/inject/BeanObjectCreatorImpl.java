@@ -23,14 +23,11 @@ public class BeanObjectCreatorImpl implements BeanObjectCreator {
     @Override
     public Object createBeanObject(Class<?> clazz) throws Exception {
 
-        Object instance = null;
         if (isSingleton(clazz)) {
-            instance = getFromCacheOrCreate(clazz);
-        } else {
-            instance = doCreateObject(clazz);
+            return getFromCacheOrCreate(clazz);
         }
 
-        return instance;
+        return doCreateObject(clazz);
     }
 
     private Object doCreateObject(Class<?> clazz) throws Exception {
