@@ -7,7 +7,7 @@ import taohu.inject.field.FinalField;
 import taohu.inject.field.PublicField;
 import taohu.inject.field.PvtField;
 import taohu.inject.field.StaticField;
-import taohu.inject.impl.BeanConfigurationResolverImp;
+import taohu.inject.impl.BeanConfigurationResolver;
 
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -18,15 +18,15 @@ import static org.mockito.Mockito.when;
 
 public class DependencyInjectorFieldsTest {
 
-    private static BeanObjectCreatorImpl beanObjectCreator;
+    private static BeanObjectCreator beanObjectCreator;
 
     @Before
     public void setUp() {
 
-        BeanConfigurationResolverImp beanConfigurationResolver = mock(BeanConfigurationResolverImp.class);
+        BeanConfigurationResolver beanConfigurationResolver = mock(BeanConfigurationResolver.class);
         when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
 
-        beanObjectCreator = new BeanObjectCreatorImpl(beanConfigurationResolver);
+        beanObjectCreator = new BeanObjectCreator(beanConfigurationResolver);
     }
 
     @Test

@@ -7,11 +7,11 @@ import taohu.model.BeanDescriptor;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class BeanConfigurationResolverImp {
+public class BeanConfigurationResolver {
 
     private List<BeanDescriptor> beanDescriptors;
 
-    public BeanConfigurationResolverImp(List<BeanDescriptor> beanDescriptors) {
+    public BeanConfigurationResolver(List<BeanDescriptor> beanDescriptors) {
 
         this.beanDescriptors = beanDescriptors;
     }

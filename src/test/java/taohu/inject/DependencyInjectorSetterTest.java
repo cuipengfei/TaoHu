@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import taohu.inject.ctor.NoParaCtor;
-import taohu.inject.impl.BeanConfigurationResolverImp;
+import taohu.inject.impl.BeanConfigurationResolver;
 import taohu.inject.setter.*;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -16,17 +16,17 @@ import static org.mockito.Mockito.when;
 public class DependencyInjectorSetterTest {
 
     @Mock
-    private BeanConfigurationResolverImp beanConfigurationResolver;
+    private BeanConfigurationResolver beanConfigurationResolver;
 
-    private static BeanObjectCreatorImpl beanObjectCreator;
+    private static BeanObjectCreator beanObjectCreator;
 
     @Before
     public void setUp() {
 
-        BeanConfigurationResolverImp beanConfigurationResolver = mock(BeanConfigurationResolverImp.class);
+        BeanConfigurationResolver beanConfigurationResolver = mock(BeanConfigurationResolver.class);
         when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
 
-        beanObjectCreator = new BeanObjectCreatorImpl(beanConfigurationResolver);
+        beanObjectCreator = new BeanObjectCreator(beanConfigurationResolver);
     }
 
     @Test

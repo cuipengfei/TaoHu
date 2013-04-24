@@ -12,7 +12,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class BeanConfigurationResolverImpTest {
+public class BeanConfigurationResolverTest {
 
     private List<BeanDescriptor> beanDescriptors;
 
@@ -26,7 +26,7 @@ public class BeanConfigurationResolverImpTest {
 
     @Test
     public void shouldKnowContainsBeanOrNot() throws Exception {
-        BeanConfigurationResolverImp resolver = new BeanConfigurationResolverImp(this.beanDescriptors);
+        BeanConfigurationResolver resolver = new BeanConfigurationResolver(this.beanDescriptors);
         boolean shouldContain = resolver.containsBean(OneParaCtor.class);
         boolean shouldNotContain = resolver.containsBean(AnnotatedNoParaCtor.class);
 
@@ -36,7 +36,7 @@ public class BeanConfigurationResolverImpTest {
 
     @Test
     public void shouldReturnBeanClass(){
-        BeanConfigurationResolverImp resolver = new BeanConfigurationResolverImp(this.beanDescriptors);
+        BeanConfigurationResolver resolver = new BeanConfigurationResolver(this.beanDescriptors);
         Class clazz = resolver.getBeanClass("onePara");
 
         assertThat(clazz.equals(OneParaCtor.class), is(true));

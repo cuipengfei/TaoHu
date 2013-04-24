@@ -5,7 +5,7 @@ import org.junit.Test;
 import taohu.inject.ctor.AnnotatedNoParaCtor;
 import taohu.inject.ctor.OneParaCtor;
 import taohu.inject.exception.BeanNotRegisteredToCreateException;
-import taohu.inject.impl.BeanConfigurationResolverImp;
+import taohu.inject.impl.BeanConfigurationResolver;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -15,17 +15,17 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class BeanObjectCreatorImplTest {
+public class BeanObjectCreatorTest {
 
-    private BeanConfigurationResolverImp beanConfigurationResolver;
+    private BeanConfigurationResolver beanConfigurationResolver;
 
-    private BeanObjectCreatorImpl creator;
+    private BeanObjectCreator creator;
 
     @Before
     public void setUp() {
-        this.beanConfigurationResolver = mock(BeanConfigurationResolverImp.class);
+        this.beanConfigurationResolver = mock(BeanConfigurationResolver.class);
         when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
-        this.creator = new BeanObjectCreatorImpl(beanConfigurationResolver);
+        this.creator = new BeanObjectCreator(beanConfigurationResolver);
     }
 
     @Test
