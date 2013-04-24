@@ -16,12 +16,6 @@ public class BeanObjectFactoryTest {
 
     private static BeanObjectFactory beanObjectFactory;
 
-    @Test
-    public void shouldGetBeanObject() throws Exception {
-        Object object = beanObjectFactory.getBean("noPara");
-        assertThat(object.getClass().equals(AnnotatedNoParaCtor.class), is(true));
-    }
-
     @Before
     public void setUp() {
         BeanDescriptor annotatedNoPara = new BeanDescriptor("noPara", AnnotatedNoParaCtor.class);
@@ -32,5 +26,16 @@ public class BeanObjectFactoryTest {
         beanDescriptors.add(onePara);
 
         beanObjectFactory = new BeanObjectFactory(beanDescriptors);
+    }
+
+    @Test
+    public void shouldGetBeanObject() throws Exception {
+        Object object = beanObjectFactory.getBean("noPara");
+        assertThat(object.getClass().equals(AnnotatedNoParaCtor.class), is(true));
+    }
+
+    @Test
+    public void shouldNotCreateUnregisteredBeanObject() throws Exception {
+
     }
 }

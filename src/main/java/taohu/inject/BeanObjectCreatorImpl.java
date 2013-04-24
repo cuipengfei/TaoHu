@@ -4,7 +4,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import taohu.inject.exception.BeanNotRegisteredToCreateException;
 import taohu.inject.exception.LackOfAnnotationException;
+import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.interfaces.BeanObjectCreator;
 
 import javax.annotation.Nullable;
@@ -19,9 +21,19 @@ import java.util.Map;
 public class BeanObjectCreatorImpl implements BeanObjectCreator {
 
     private Map<Class, Object> objectCache = new HashMap<>();
+    private BeanConfigurationResolver beanConfigurationResolver;
+
+    public BeanObjectCreatorImpl(BeanConfigurationResolver beanConfigurationResolver){
+
+        this.beanConfigurationResolver = beanConfigurationResolver;
+    }
 
     @Override
     public Object createBeanObject(Class<?> clazz) throws Exception {
+
+        if(!beanConfigurationResolver.containsBean(clazz)) {
+            throw new BeanNotRegisteredToCreateException("This class is not registerd in xml.");
+        }
 
         if (isSingleton(clazz)) {
             return getFromCacheOrCreate(clazz);

@@ -5,8 +5,14 @@ import org.atinject.tck.auto.Car;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mock;
 import taohu.inject.BeanObjectCreatorImpl;
+import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.interfaces.BeanObjectCreator;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @Ignore
 public class TCKTest {
@@ -15,7 +21,9 @@ public class TCKTest {
 
     @Before
     public void setUp(){
-        this.beanObjectCreator = new BeanObjectCreatorImpl();
+        BeanConfigurationResolver beanConfigurationResolver = mock(BeanConfigurationResolver.class);
+        when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
+        this.beanObjectCreator = new BeanObjectCreatorImpl(beanConfigurationResolver);
     }
 
     @Test

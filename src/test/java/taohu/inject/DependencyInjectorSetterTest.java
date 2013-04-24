@@ -2,6 +2,7 @@ package taohu.inject;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import taohu.inject.ctor.NoParaCtor;
 import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.interfaces.BeanObjectCreator;
@@ -15,6 +16,9 @@ import static org.mockito.Mockito.when;
 
 public class DependencyInjectorSetterTest {
 
+    @Mock
+    private BeanConfigurationResolver beanConfigurationResolver;
+
     private static BeanObjectCreator beanObjectCreator;
 
     @Before
@@ -23,7 +27,7 @@ public class DependencyInjectorSetterTest {
         BeanConfigurationResolver beanConfigurationResolver = mock(BeanConfigurationResolver.class);
         when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
 
-        beanObjectCreator = new BeanObjectCreatorImpl();
+        beanObjectCreator = new BeanObjectCreatorImpl(beanConfigurationResolver);
     }
 
     @Test

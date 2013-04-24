@@ -1,19 +1,37 @@
 package taohu.inject;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import taohu.inject.ctor.AnnotatedNoParaCtor;
 import taohu.inject.ctor.OneParaCtor;
+import taohu.inject.exception.BeanNotRegisteredToCreateException;
+import taohu.inject.interfaces.BeanConfigurationResolver;
 import taohu.inject.interfaces.BeanObjectCreator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class BeanObjectCreatorImplTest {
 
+    private BeanConfigurationResolver beanConfigurationResolver;
+
+    private BeanObjectCreator creator;
+
+    @Before
+    public void setUp(){
+        this.beanConfigurationResolver = mock(BeanConfigurationResolver.class);
+        when(beanConfigurationResolver.containsBean(any(Class.class))).thenReturn(true);
+        this.creator = new BeanObjectCreatorImpl(beanConfigurationResolver);
+    }
+
     @Test
     public void shouldReturnSameInstanceIfClassIsSingleton() throws Exception {
-        BeanObjectCreator creator = new BeanObjectCreatorImpl();
         Object firstObject = creator.createBeanObject(AnnotatedNoParaCtor.class);
         Object secondObject = creator.createBeanObject(AnnotatedNoParaCtor.class);
 
@@ -22,11 +40,17 @@ public class BeanObjectCreatorImplTest {
 
     @Test
     public void shouldReturnSameInstanceOfSingletonClassForParameter() throws Exception {
-        BeanObjectCreator creator = new BeanObjectCreatorImpl();
         Object noPara = creator.createBeanObject(AnnotatedNoParaCtor.class);
         OneParaCtor onePara = (OneParaCtor) creator.createBeanObject(OneParaCtor.class);
 
         assertThat(onePara, notNullValue());
         assertThat(onePara.getAnnotatedNoParaCtor(), is(noPara));
+    }
+
+    @Test(expected = BeanNotRegisteredToCreateException.class)
+    public void shouldNotCreateInstanceIfClassIsNotRegistered() throws Exception {
+        given(beanConfigurationResolver.containsBean(any(Class.class))).willReturn(false);
+
+        creator.createBeanObject(AnnotatedNoParaCtor.class);
     }
 }
