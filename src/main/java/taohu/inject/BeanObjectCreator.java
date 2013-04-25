@@ -42,7 +42,7 @@ public class BeanObjectCreator {
         this.parentCreator = parentCreator;
     }
 
-    public Object getBeanObject(Class<?> clazz) throws Exception {
+    public Object getBeanObject(Class<?> clazz) throws LackOfAnnotationException, BeanNotRegisteredException, BeanCreateException {
 
         if (!beanConfigurationResolver.containsBean(clazz)) {
             if (parentCreator != null) {

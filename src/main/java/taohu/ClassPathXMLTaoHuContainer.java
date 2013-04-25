@@ -3,6 +3,7 @@ package taohu;
 import taohu.inject.BeanObjectCreator;
 import taohu.inject.exception.BeanCreateException;
 import taohu.inject.exception.BeanNotRegisteredException;
+import taohu.inject.exception.LackOfAnnotationException;
 import taohu.model.BeanDescriptor;
 import taohu.resolver.BeanConfigurationResolver;
 import taohu.resolver.XmlBeanParser;
@@ -30,7 +31,7 @@ public class ClassPathXMLTaoHuContainer {
         this.beanObjectCreator = new BeanObjectCreator(beanConfigurationResolver);
     }
 
-    public Object getBeanByID(String beanId) throws Exception {
+    public Object getBeanByID(String beanId) throws LackOfAnnotationException, BeanCreateException, BeanNotRegisteredException {
 
         Class clazz = beanConfigurationResolver.getBeanClass(beanId);
         if (clazz == null) {
