@@ -1,4 +1,4 @@
-package taohu.Resolver;
+package taohu.resolver;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;

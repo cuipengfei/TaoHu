@@ -1,4 +1,4 @@
-package taohu.Resolver;
+package taohu.resolver;
 
 import org.junit.Test;
 import org.xml.sax.SAXException;
