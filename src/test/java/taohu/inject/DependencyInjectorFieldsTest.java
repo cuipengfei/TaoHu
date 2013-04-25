@@ -7,7 +7,7 @@ import taohu.inject.field.FinalField;
 import taohu.inject.field.PublicField;
 import taohu.inject.field.PvtField;
 import taohu.inject.field.StaticField;
-import taohu.inject.impl.BeanConfigurationResolver;
+import taohu.resolver.BeanConfigurationResolver;
 
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.nullValue;

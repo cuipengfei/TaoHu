@@ -1,12 +1,18 @@
 package taohu.inject.injectors;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import taohu.inject.BeanObjectCreator;
-import taohu.inject.ConstructorAnnotationStatus;
-import taohu.inject.ConstructorInspector;
+import taohu.inject.enums.ConstructorAnnotationStatus;
 import taohu.inject.exception.LackOfAnnotationException;
 
+import javax.annotation.Nullable;
+import javax.inject.Inject;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConstructorInjector implements Injector {
@@ -15,6 +21,42 @@ public class ConstructorInjector implements Injector {
 
     public ConstructorInjector(BeanObjectCreator beanObjectCreator) {
         this.beanObjectCreator = beanObjectCreator;
+    }
+
+    private static boolean isOnlyConstructorSuitable(Constructor<?> constructor)
+            throws LackOfAnnotationException {
+        Constructor suitableConstructor = null;
+        boolean hasPara = constructor.getParameterTypes().length > 0;
+        if (!hasPara) {
+            suitableConstructor = constructor;
+
+        } else if (isConstructorAnnotatedWithInject(constructor)) {
+            suitableConstructor = constructor;
+        }
+        return suitableConstructor != null;
+    }
+
+    private static boolean isConstructorAnnotatedWithInject(Constructor<?> constructor) {
+        ArrayList<Annotation> annotations = Lists.newArrayList(constructor.getAnnotations());
+        boolean hasAnnotations = annotations.size() > 0;
+        boolean injectExists = Iterables.any(annotations, new Predicate<Annotation>() {
+            @Override
+            public boolean apply(@Nullable Annotation input) {
+                return input.annotationType().equals(Inject.class);
+            }
+        });
+
+        return hasAnnotations && injectExists;
+    }
+
+    private static List<Constructor<?>> getConstructorsAnnotatedWithInject(Constructor<?>[] constructors) {
+        return Lists.newArrayList(Iterables.filter(Lists.newArrayList(constructors),
+                new Predicate<Constructor<?>>() {
+                    @Override
+                    public boolean apply(@Nullable Constructor<?> input) {
+                        return isConstructorAnnotatedWithInject(input);
+                    }
+                }));
     }
 
     @Override
@@ -45,7 +87,7 @@ public class ConstructorInjector implements Injector {
 
         if (constructors.length == 1) {
             Constructor<?> onlyConstructor = constructors[0];
-            if (ConstructorInspector.isOnlyConstructorSuitable(onlyConstructor)) {
+            if (isOnlyConstructorSuitable(onlyConstructor)) {
                 suitableConstructor = onlyConstructor;
             } else {
                 throw new LackOfAnnotationException("Should have Inject annotation on Constructor with parameters");
@@ -59,7 +101,7 @@ public class ConstructorInjector implements Injector {
     private Constructor getSuitableConstructorFromMultipleConstructors(Constructor<?>[] constructors)
             throws Exception {
         Constructor<?> suitableConstructor;
-        List<Constructor<?>> constructorsAnnotatedWithInject = ConstructorInspector.getConstructorsAnnotatedWithInject(constructors);
+        List<Constructor<?>> constructorsAnnotatedWithInject = getConstructorsAnnotatedWithInject(constructors);
         ConstructorAnnotationStatus status = inspectStatus(constructorsAnnotatedWithInject);
 
         if (status == ConstructorAnnotationStatus.OneAnnotatedAsInject) {

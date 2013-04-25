@@ -5,7 +5,7 @@ import org.junit.Test;
 import taohu.inject.ctor.AnnotatedNoParaCtor;
 import taohu.inject.ctor.OneParaCtor;
 import taohu.inject.exception.BeanNotRegisteredToCreateException;
-import taohu.inject.impl.BeanConfigurationResolver;
+import taohu.resolver.BeanConfigurationResolver;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

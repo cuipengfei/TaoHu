@@ -3,7 +3,7 @@ package taohu.inject;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import taohu.inject.exception.BeanNotRegisteredToCreateException;
-import taohu.inject.impl.BeanConfigurationResolver;
+import taohu.resolver.BeanConfigurationResolver;
 import taohu.inject.injectors.Injector;
 import taohu.inject.injectors.InjectorFactory;
 

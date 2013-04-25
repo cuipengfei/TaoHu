@@ -1,4 +1,4 @@
-package taohu.inject;
+package taohu.inject.enums;
 
 import taohu.inject.exception.IllegalAnnotationQuantityException;
 import taohu.inject.exception.LackOfAnnotationException;

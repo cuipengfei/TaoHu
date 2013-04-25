@@ -2,6 +2,7 @@ package taohu.inject.impl;
 
 import org.junit.Before;
 import org.junit.Test;
+import taohu.resolver.BeanConfigurationResolver;
 import taohu.inject.ctor.AnnotatedNoParaCtor;
 import taohu.inject.ctor.OneParaCtor;
 import taohu.model.BeanDescriptor;

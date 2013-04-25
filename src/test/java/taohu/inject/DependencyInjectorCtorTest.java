@@ -5,7 +5,7 @@ import org.junit.Test;
 import taohu.inject.ctor.*;
 import taohu.inject.exception.IllegalAnnotationQuantityException;
 import taohu.inject.exception.LackOfAnnotationException;
-import taohu.inject.impl.BeanConfigurationResolver;
+import taohu.resolver.BeanConfigurationResolver;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
