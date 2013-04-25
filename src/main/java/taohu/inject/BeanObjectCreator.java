@@ -1,11 +1,13 @@
 package taohu.inject;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import taohu.inject.exception.BeanNotRegisteredToCreateException;
-import taohu.resolver.BeanConfigurationResolver;
+import taohu.inject.exception.BeanNotRegisteredException;
 import taohu.inject.injectors.Injector;
 import taohu.inject.injectors.InjectorFactory;
+import taohu.resolver.BeanConfigurationResolver;
 
 import javax.annotation.Nullable;
 import javax.inject.Singleton;
@@ -32,17 +34,6 @@ public class BeanObjectCreator {
         setterInjector = InjectorFactory.getSetterInjector(this);
     }
 
-    //why is this here?
-    public Object createBeanObject(String beanId) throws Exception {
-        Class beanClass = beanConfigurationResolver.getBeanClass(beanId);
-
-        if (beanClass == null) {
-            throw new BeanNotRegisteredToCreateException("This bean is not defined in xml: " + beanId);
-        }
-
-        return this.createBeanObject(beanClass);
-    }
-
     public Object createBeanObject(Class<?> clazz) throws Exception {
         throwIfNotRegistered(clazz);
 
@@ -53,9 +44,9 @@ public class BeanObjectCreator {
         return doCreateObject(clazz);
     }
 
-    private void throwIfNotRegistered(Class<?> clazz) throws BeanNotRegisteredToCreateException {
+    private void throwIfNotRegistered(Class<?> clazz) throws BeanNotRegisteredException {
         if (!beanConfigurationResolver.containsBean(clazz)) {
-            throw new BeanNotRegisteredToCreateException("This class is not registered in xml: " + clazz);
+            throw new BeanNotRegisteredException("This class is not registered in xml: " + clazz);
         }
     }
 
@@ -78,12 +69,12 @@ public class BeanObjectCreator {
 
     private boolean isSingleton(Class<?> clazz) {
         Annotation[] annotations = clazz.getAnnotations();
-        for (Annotation annotation : annotations) {
-            if (annotation.annotationType().equals(Singleton.class)) {
-                return true;
+        return Iterables.any(Lists.newArrayList(annotations), new Predicate<Annotation>() {
+            @Override
+            public boolean apply(@Nullable Annotation input) {
+                return input.annotationType().equals(Singleton.class);
             }
-        }
-        return false;
+        });
     }
 
     public List<Object> getInstances(Class<?>[] instanceTypes) {

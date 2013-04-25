@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 public class SetterInjector implements Injector {
+
     private BeanObjectCreator beanObjectCreator;
 
     public SetterInjector(BeanObjectCreator beanObjectCreator) {

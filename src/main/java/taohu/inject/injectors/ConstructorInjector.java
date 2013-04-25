@@ -23,6 +23,13 @@ public class ConstructorInjector implements Injector {
         this.beanObjectCreator = beanObjectCreator;
     }
 
+    @Override
+    public Object inject(Object instance, Class<?> clazz) throws Exception {
+        Constructor suitableConstructor = getSuitableConstructor(clazz);
+
+        return injectConstructor(suitableConstructor);
+    }
+
     private static boolean isOnlyConstructorSuitable(Constructor<?> constructor)
             throws LackOfAnnotationException {
         Constructor suitableConstructor = null;
@@ -57,13 +64,6 @@ public class ConstructorInjector implements Injector {
                         return isConstructorAnnotatedWithInject(input);
                     }
                 }));
-    }
-
-    @Override
-    public Object inject(Object instance, Class<?> clazz) throws Exception {
-        Constructor suitableConstructor = getSuitableConstructor(clazz);
-
-        return injectConstructor(suitableConstructor);
     }
 
     private Object injectConstructor(Constructor<?> constructor)
@@ -104,7 +104,7 @@ public class ConstructorInjector implements Injector {
         List<Constructor<?>> constructorsAnnotatedWithInject = getConstructorsAnnotatedWithInject(constructors);
         ConstructorAnnotationStatus status = inspectStatus(constructorsAnnotatedWithInject);
 
-        if (status == ConstructorAnnotationStatus.OneAnnotatedAsInject) {
+        if (status == ConstructorAnnotationStatus.OneWithInject) {
             suitableConstructor = constructorsAnnotatedWithInject.get(0);
         } else {
             throw status.getException();
@@ -116,11 +116,11 @@ public class ConstructorInjector implements Injector {
         int annotationCount = constructorsAnnotatedWithInject.size();
 
         if (annotationCount == 1) {
-            return ConstructorAnnotationStatus.OneAnnotatedAsInject;
+            return ConstructorAnnotationStatus.OneWithInject;
         } else if (annotationCount == 0) {
-            return ConstructorAnnotationStatus.NoOneAnnotatedAsInject;
+            return ConstructorAnnotationStatus.NoOneWithInject;
         } else {
-            return ConstructorAnnotationStatus.MoreThanOneAnnotatedAsInject;
+            return ConstructorAnnotationStatus.MoreThanOneWithInject;
         }
     }
 }

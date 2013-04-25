@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import taohu.inject.ctor.AnnotatedNoParaCtor;
 import taohu.inject.ctor.OneParaCtor;
-import taohu.inject.exception.BeanNotRegisteredToCreateException;
+import taohu.inject.exception.BeanNotRegisteredException;
 import taohu.resolver.BeanConfigurationResolver;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -45,7 +45,7 @@ public class BeanObjectCreatorTest {
         assertThat(onePara.getAnnotatedNoParaCtor(), is(noPara));
     }
 
-    @Test(expected = BeanNotRegisteredToCreateException.class)
+    @Test(expected = BeanNotRegisteredException.class)
     public void shouldNotCreateInstanceIfClassIsNotRegistered() throws Exception {
         given(beanConfigurationResolver.containsBean(any(Class.class))).willReturn(false);
 
