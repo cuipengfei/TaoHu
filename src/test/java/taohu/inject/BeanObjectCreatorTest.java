@@ -30,16 +30,16 @@ public class BeanObjectCreatorTest {
 
     @Test
     public void shouldReturnSameInstanceIfClassIsSingleton() throws Exception {
-        Object firstObject = creator.createBeanObject(AnnotatedNoParaCtor.class);
-        Object secondObject = creator.createBeanObject(AnnotatedNoParaCtor.class);
+        Object firstObject = creator.getBeanObject(AnnotatedNoParaCtor.class);
+        Object secondObject = creator.getBeanObject(AnnotatedNoParaCtor.class);
 
         assertThat(firstObject, is(secondObject));
     }
 
     @Test
     public void shouldReturnSameInstanceOfSingletonClassForParameter() throws Exception {
-        Object noPara = creator.createBeanObject(AnnotatedNoParaCtor.class);
-        OneParaCtor onePara = (OneParaCtor) creator.createBeanObject(OneParaCtor.class);
+        Object noPara = creator.getBeanObject(AnnotatedNoParaCtor.class);
+        OneParaCtor onePara = (OneParaCtor) creator.getBeanObject(OneParaCtor.class);
 
         assertThat(onePara, notNullValue());
         assertThat(onePara.getAnnotatedNoParaCtor(), is(noPara));
@@ -49,6 +49,6 @@ public class BeanObjectCreatorTest {
     public void shouldNotCreateInstanceIfClassIsNotRegistered() throws Exception {
         given(beanConfigurationResolver.containsBean(any(Class.class))).willReturn(false);
 
-        creator.createBeanObject(AnnotatedNoParaCtor.class);
+        creator.getBeanObject(AnnotatedNoParaCtor.class);
     }
 }

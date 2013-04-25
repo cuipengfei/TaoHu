@@ -34,7 +34,12 @@ public class BeanObjectCreator {
         setterInjector = InjectorFactory.getSetterInjector(this);
     }
 
-    public Object createBeanObject(Class<?> clazz) throws Exception {
+    public Object getBeanObject(String id) throws Exception {
+        Class<?> beanClass = beanConfigurationResolver.getBeanClass(id);
+        return getBeanObject(beanClass);
+    }
+
+    public Object getBeanObject(Class<?> clazz) throws Exception {
         throwIfNotRegistered(clazz);
 
         if (isSingleton(clazz)) {
@@ -82,7 +87,7 @@ public class BeanObjectCreator {
             @Override
             public Object apply(@Nullable Class<?> instanceType) {
                 try {
-                    return createBeanObject(instanceType);
+                    return getBeanObject(instanceType);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

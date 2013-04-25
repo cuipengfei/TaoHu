@@ -26,7 +26,7 @@ public class TCKTest {
 
     @Test
     public void testCar() throws Exception {
-        Tck.testsFor((Car) beanObjectCreator.createBeanObject(Class.forName("org.atinject.tck.auto.Convertible")),
+        Tck.testsFor((Car) beanObjectCreator.getBeanObject(Class.forName("org.atinject.tck.auto.Convertible")),
                 false, false);
     }
 }

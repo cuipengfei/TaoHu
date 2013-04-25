@@ -32,7 +32,7 @@ public class DependencyInjectorSetterTest {
     @Test
     public void shouldCallSetterWithInjectAndProvidePara()
             throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInject"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.setter.SetterWithInject"));
 
         assertThat((SetterWithInject) instance, isA(SetterWithInject.class));
         assertThat(((SetterWithInject) instance).getNoParaCtor(), isA(NoParaCtor.class));
@@ -41,7 +41,7 @@ public class DependencyInjectorSetterTest {
     @Test
     public void shouldCallMultiParameteredSetterWithInjectAndProvideParameters()
             throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInject"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.setter.SetterWithInject"));
 
         assertThat((SetterWithInject) instance, isA(SetterWithInject.class));
         assertThat(((SetterWithInject) instance).getNoParaCtor2(), isA(NoParaCtor.class));
@@ -51,7 +51,7 @@ public class DependencyInjectorSetterTest {
     @Test
     public void shouldNotCallSetterWithoutInject()
             throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.SetterWithoutInject"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.setter.SetterWithoutInject"));
 
         assertThat((SetterWithoutInject) instance, isA(SetterWithoutInject.class));
         assertThat(((SetterWithoutInject) instance).getNoParaCtor(), nullValue());
@@ -59,28 +59,28 @@ public class DependencyInjectorSetterTest {
 
     @Test
     public void shouldNotCallMethodWithTypePara() throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInjectAndItsOwnTypePara"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.setter.SetterWithInjectAndItsOwnTypePara"));
 
         assertThat(((SetterWithInjectAndItsOwnTypePara) instance).getStr(), nullValue());
     }
 
     @Test
     public void shouldCallMethodWithTypeParaOfItsClass() throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.SetterWithInjectAndTypeParaFromItClass"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.setter.SetterWithInjectAndTypeParaFromItClass"));
 
         assertThat(((SetterWithInjectAndTypeParaFromItClass) instance).getStr(), is("method called"));
     }
 
     @Test
     public void shouldCallPrivateSetter() throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.PvtSetter"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.setter.PvtSetter"));
 
         assertThat(((PvtSetter) instance).getNoParaCtor(), isA(NoParaCtor.class));
     }
 
     @Test
     public void shouldCallStaticSetter() throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.setter.StaticSetter"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.setter.StaticSetter"));
 
 
         assertThat(((StaticSetter) instance).getNoParaCtor(), isA(NoParaCtor.class));

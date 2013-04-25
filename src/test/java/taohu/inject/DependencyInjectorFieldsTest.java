@@ -31,28 +31,28 @@ public class DependencyInjectorFieldsTest {
 
     @Test
     public void shouldSetPublicField() throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.field.PublicField"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.field.PublicField"));
 
         assertThat(((PublicField) instance).noParaCtor, isA(NoParaCtor.class));
     }
 
     @Test
     public void shouldSetPrivateField() throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.field.PvtField"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.field.PvtField"));
 
         assertThat(((PvtField) instance).getNoParaCtor(), isA(NoParaCtor.class));
     }
 
     @Test
     public void shouldNotSetFinalField() throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.field.FinalField"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.field.FinalField"));
 
         assertThat(((FinalField) instance).noParaCtor, nullValue());
     }
 
     @Test
     public void shouldSetStaticField() throws Exception {
-        Object instance = beanObjectCreator.createBeanObject(Class.forName("taohu.inject.field.StaticField"));
+        Object instance = beanObjectCreator.getBeanObject(Class.forName("taohu.inject.field.StaticField"));
 
         assertThat(((StaticField) instance).noParaCtor, isA(NoParaCtor.class));
     }
