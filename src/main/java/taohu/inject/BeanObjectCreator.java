@@ -4,10 +4,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import taohu.inject.exception.BeanNotRegisteredToCreateException;
 import taohu.inject.impl.BeanConfigurationResolver;
-import taohu.inject.injectors.ConstructorInjector;
-import taohu.inject.injectors.FieldInjector;
 import taohu.inject.injectors.Injector;
-import taohu.inject.injectors.SetterInjector;
+import taohu.inject.injectors.InjectorFactory;
 
 import javax.annotation.Nullable;
 import javax.inject.Singleton;
@@ -29,9 +27,9 @@ public class BeanObjectCreator {
         this.beanConfigurationResolver = beanConfigurationResolver;
         objectCache = new HashMap<>();
 
-        constructorInjector = new ConstructorInjector(this);
-        fieldInjector = new FieldInjector(this);
-        setterInjector = new SetterInjector(this);
+        constructorInjector = InjectorFactory.getConstructorInjector(this);
+        fieldInjector = InjectorFactory.getFieldInjector(this);
+        setterInjector = InjectorFactory.getSetterInjector(this);
     }
 
     public Object createBeanObject(String beanId) throws Exception {
