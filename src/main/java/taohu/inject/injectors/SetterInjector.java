@@ -11,14 +11,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class SetterInjector {
+public class SetterInjector implements Injector {
     private BeanObjectCreator beanObjectCreator;
 
     public SetterInjector(BeanObjectCreator beanObjectCreator) {
         this.beanObjectCreator = beanObjectCreator;
     }
 
-    public void injectSetters(Object instance, Class<?> clazz) throws InvocationTargetException, IllegalAccessException {
+    @Override
+    public Object inject(Object instance, Class<?> clazz) throws ReflectiveOperationException {
         Method[] methods = clazz.getDeclaredMethods();
         Iterable<Method> methodsWithInjectAndNoTypeParaOfItsOwn = Iterables.filter(Lists.newArrayList(methods), new Predicate<Method>() {
             @Override
@@ -31,6 +32,8 @@ public class SetterInjector {
         for (Method method : methodsWithInjectAndNoTypeParaOfItsOwn) {
             callSetter(instance, method);
         }
+
+        return null;
     }
 
     private void callSetter(Object instance, Method method) throws IllegalAccessException, InvocationTargetException {

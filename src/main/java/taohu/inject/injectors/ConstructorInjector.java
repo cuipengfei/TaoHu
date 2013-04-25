@@ -9,7 +9,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class ConstructorInjector {
+public class ConstructorInjector implements Injector {
 
     private BeanObjectCreator beanObjectCreator;
 
@@ -17,8 +17,8 @@ public class ConstructorInjector {
         this.beanObjectCreator = beanObjectCreator;
     }
 
-    public Object injectConstructor(Class<?> clazz)
-            throws Exception {
+    @Override
+    public Object inject(Object instance, Class<?> clazz) throws Exception {
         Constructor suitableConstructor = getSuitableConstructor(clazz);
 
         return injectConstructor(suitableConstructor);

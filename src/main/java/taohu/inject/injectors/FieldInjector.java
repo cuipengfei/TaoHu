@@ -11,14 +11,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-public class FieldInjector {
+public class FieldInjector implements Injector {
     private BeanObjectCreator beanObjectCreator;
 
     public FieldInjector(BeanObjectCreator beanObjectCreator) {
         this.beanObjectCreator = beanObjectCreator;
     }
 
-    public void injectFields(Object instance, Class<?> clazz) throws IllegalAccessException {
+    @Override
+    public Object inject(Object instance, Class<?> clazz) throws IllegalAccessException {
         Field[] fields = clazz.getDeclaredFields();
         Iterable<Field> nonFinalfieldsWithInject = Iterables.filter(Lists.newArrayList(fields), new Predicate<Field>() {
             @Override
@@ -30,6 +31,8 @@ public class FieldInjector {
         for (Field field : nonFinalfieldsWithInject) {
             setField(instance, field);
         }
+
+        return null;
     }
 
     private void setField(Object instance, Field field) throws IllegalAccessException {

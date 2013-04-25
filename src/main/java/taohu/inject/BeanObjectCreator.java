@@ -6,6 +6,7 @@ import taohu.inject.exception.BeanNotRegisteredToCreateException;
 import taohu.inject.impl.BeanConfigurationResolver;
 import taohu.inject.injectors.ConstructorInjector;
 import taohu.inject.injectors.FieldInjector;
+import taohu.inject.injectors.Injector;
 import taohu.inject.injectors.SetterInjector;
 
 import javax.annotation.Nullable;
@@ -20,9 +21,9 @@ public class BeanObjectCreator {
     private Map<Class, Object> objectCache;
     private BeanConfigurationResolver beanConfigurationResolver;
 
-    private ConstructorInjector constructorInjector;
-    private FieldInjector fieldInjector;
-    private SetterInjector setterInjector;
+    private Injector constructorInjector;
+    private Injector fieldInjector;
+    private Injector setterInjector;
 
     public BeanObjectCreator(BeanConfigurationResolver beanConfigurationResolver) {
         this.beanConfigurationResolver = beanConfigurationResolver;
@@ -58,9 +59,9 @@ public class BeanObjectCreator {
 
     private Object doCreateObject(Class<?> clazz) throws Exception {
         Object instance;
-        instance = constructorInjector.injectConstructor(clazz);
-        fieldInjector.injectFields(instance, clazz);
-        setterInjector.injectSetters(instance, clazz);
+        instance = constructorInjector.inject(null, clazz);
+        fieldInjector.inject(instance, clazz);
+        setterInjector.inject(instance, clazz);
         return instance;
     }
 
