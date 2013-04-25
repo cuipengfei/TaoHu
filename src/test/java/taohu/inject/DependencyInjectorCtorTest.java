@@ -3,6 +3,7 @@ package taohu.inject;
 import org.junit.Before;
 import org.junit.Test;
 import taohu.inject.ctor.*;
+import taohu.inject.exception.BeanCreateException;
 import taohu.inject.exception.IllegalAnnotationQuantityException;
 import taohu.inject.exception.LackOfAnnotationException;
 import taohu.resolver.BeanConfigurationResolver;
@@ -67,7 +68,7 @@ public class DependencyInjectorCtorTest {
         beanObjectCreator.getBeanObject(Class.forName("taohu.inject.ctor.OneParaCtorWithoutAnnotation"));
     }
 
-    @Test(expected = LackOfAnnotationException.class)
+    @Test(expected = BeanCreateException.class)
     public void shouldThrowExceptionWhenBothCtorsAreNotAnnotated() throws Exception {
         beanObjectCreator.getBeanObject(Class.forName("taohu.inject.ctor.TwoCtorsWithoutAnnotation"));
     }
@@ -88,7 +89,7 @@ public class DependencyInjectorCtorTest {
         assertThat(((TwoCtorsWithOneAnnotation) instance).getOneParaCtor(), is(OneParaCtor.class));
     }
 
-    @Test(expected = IllegalAnnotationQuantityException.class)
+    @Test(expected = BeanCreateException.class)
     public void shouldThrowExceptionWhenTwoCtorsAreAnnotated() throws Exception {
         beanObjectCreator.getBeanObject(Class.forName("taohu.inject.ctor.TwoCtorsWithTwoAnnotations"));
     }
