@@ -19,11 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TaoHuContainer {
+public class ClassPathXMLTaoHuContainer {
 
     private Map<String, BeanObjectCreator> creatorsWithScopeName;
 
-    public TaoHuContainer() {
+    public ClassPathXMLTaoHuContainer() {
         this.creatorsWithScopeName = new HashMap<>();
     }
 

@@ -10,13 +10,13 @@ import java.io.IOException;
 import static org.hamcrest.core.Is.isA;
 import static org.junit.Assert.assertThat;
 
-public class TaoHuContainerTest {
+public class ClassPathXMLTaoHuContainerTest {
     @Test
     public void shouldCreateObjectWhenBeanIsDefinedInXML() throws Exception, IOException, ClassNotFoundException, SAXException, ParserConfigurationException {
-        TaoHuContainer taoHuContainer = new TaoHuContainer();
-        taoHuContainer.addXMLConfig("taohu/legalXmlFile.xml");
+        ClassPathXMLTaoHuContainer classPathXMLTaoHuContainer = new ClassPathXMLTaoHuContainer();
+        classPathXMLTaoHuContainer.addXMLConfig("taohu/legalXmlFile.xml");
 
-        Object first = taoHuContainer.getBeanByID("first");
+        Object first = classPathXMLTaoHuContainer.getBeanByID("first");
 
         assertThat((NoParaCtor) first, isA(NoParaCtor.class));
     }
