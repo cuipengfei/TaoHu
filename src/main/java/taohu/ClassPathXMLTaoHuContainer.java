@@ -38,10 +38,7 @@ public class ClassPathXMLTaoHuContainer {
 
     public Object getBeanByID(String beanId) throws LackOfAnnotationException, BeanCreateException, BeanNotRegisteredException {
 
-        Class clazz = beanConfigurationResolver.getBeanClass(beanId);
-        if (clazz == null && parentContainer != null) {
-            clazz = parentContainer.getBeanConfigurationResolver().getBeanClass(beanId);
-        }
+        Class clazz = getBeanClass(beanId);
 
         if (clazz == null) {
             throw new BeanNotRegisteredException("The required bean is not registered, bean id: " + beanId);
@@ -56,6 +53,14 @@ public class ClassPathXMLTaoHuContainer {
 
     public BeanObjectCreator getBeanObjectCreator() {
         return beanObjectCreator;
+    }
+
+    private Class getBeanClass(String beanId) {
+        Class clazz = beanConfigurationResolver.getBeanClass(beanId);
+        if (clazz == null && parentContainer != null) {
+            clazz = parentContainer.getBeanConfigurationResolver().getBeanClass(beanId);
+        }
+        return clazz;
     }
 
     private void createBeanResolver(String xmlFilePath) throws BeanCreateException {
