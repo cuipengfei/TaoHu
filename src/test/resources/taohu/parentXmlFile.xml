@@ -3,4 +3,6 @@
 
     <bean id="annotatedNoParaCtor" class="taohu.inject.ctor.AnnotatedNoParaCtor"/>
 
+    <bean id="oneParaCtor" class="taohu.inject.ctor.OneParaCtor"/>
+
 </beans>

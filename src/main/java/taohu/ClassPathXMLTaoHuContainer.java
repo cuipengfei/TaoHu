@@ -28,13 +28,18 @@ public class ClassPathXMLTaoHuContainer {
 
         createBeanResolver(xmlFilePath);
 
-        this.beanObjectCreator = new BeanObjectCreator(beanConfigurationResolver);
+        if (parentContainer == null) {
+            this.beanObjectCreator = new BeanObjectCreator(beanConfigurationResolver);
+        } else {
+            this.beanObjectCreator = new BeanObjectCreator(beanConfigurationResolver, parentContainer.getBeanObjectCreator());
+        }
+
     }
 
     public Object getBeanByID(String beanId) throws LackOfAnnotationException, BeanCreateException, BeanNotRegisteredException {
 
         Class clazz = beanConfigurationResolver.getBeanClass(beanId);
-        if (clazz == null) {
+        if (clazz == null && parentContainer != null) {
             clazz = parentContainer.getBeanConfigurationResolver().getBeanClass(beanId);
         }
 
@@ -47,6 +52,10 @@ public class ClassPathXMLTaoHuContainer {
 
     public BeanConfigurationResolver getBeanConfigurationResolver() {
         return beanConfigurationResolver;
+    }
+
+    public BeanObjectCreator getBeanObjectCreator() {
+        return beanObjectCreator;
     }
 
     private void createBeanResolver(String xmlFilePath) throws BeanCreateException {
