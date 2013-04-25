@@ -13,7 +13,6 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class ConstructorInjector implements Injector {
     }
 
     @Override
-    public Object inject(Object instance, Class<?> clazz) throws Exception {
+    public Object inject(Object instance, Class<?> clazz) throws BeanCreateException, LackOfAnnotationException, BeanNotRegisteredException {
         Constructor suitableConstructor = getSuitableConstructor(clazz);
 
         return injectConstructor(suitableConstructor);
@@ -69,21 +68,25 @@ public class ConstructorInjector implements Injector {
     }
 
     private Object injectConstructor(Constructor<?> constructor)
-            throws InstantiationException, IllegalAccessException, InvocationTargetException, BeanCreateException, BeanNotRegisteredException {
+            throws BeanCreateException, BeanNotRegisteredException {
         Class<?>[] parameterTypes = constructor.getParameterTypes();
         List<Object> parameters = beanObjectCreator.getInstances(parameterTypes);
 
         constructor.setAccessible(true);
         Object instance;
-        if (parameters.size() > 0) {
-            instance = constructor.newInstance(parameters.toArray());
-        } else {
-            instance = constructor.newInstance();
+        try {
+            if (parameters.size() > 0) {
+                instance = constructor.newInstance(parameters.toArray());
+            } else {
+                instance = constructor.newInstance();
+            }
+        } catch (Exception e) {
+            throw new BeanCreateException("Failed to create object instance, caused by: ", e);
         }
         return instance;
     }
 
-    private Constructor getSuitableConstructor(Class<?> clazz) throws Exception {
+    private Constructor getSuitableConstructor(Class<?> clazz) throws BeanCreateException, LackOfAnnotationException {
         Constructor suitableConstructor;
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 
@@ -100,8 +103,7 @@ public class ConstructorInjector implements Injector {
         return suitableConstructor;
     }
 
-    private Constructor getSuitableConstructorFromMultipleConstructors(Constructor<?>[] constructors)
-            throws Exception {
+    private Constructor getSuitableConstructorFromMultipleConstructors(Constructor<?>[] constructors) throws BeanCreateException {
         Constructor<?> suitableConstructor;
         List<Constructor<?>> constructorsAnnotatedWithInject = getConstructorsAnnotatedWithInject(constructors);
         ConstructorAnnotationStatus status = inspectStatus(constructorsAnnotatedWithInject);
@@ -109,7 +111,7 @@ public class ConstructorInjector implements Injector {
         if (status == ConstructorAnnotationStatus.OneWithInject) {
             suitableConstructor = constructorsAnnotatedWithInject.get(0);
         } else {
-            throw status.getException();
+            throw new BeanCreateException("Caused by: ", status.getException());
         }
         return suitableConstructor;
     }

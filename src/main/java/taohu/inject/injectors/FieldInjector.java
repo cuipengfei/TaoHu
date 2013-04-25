@@ -22,7 +22,7 @@ public class FieldInjector implements Injector {
     }
 
     @Override
-    public Object inject(Object instance, Class<?> clazz) throws IllegalAccessException, BeanCreateException, BeanNotRegisteredException {
+    public Object inject(Object instance, Class<?> clazz) throws BeanCreateException, BeanNotRegisteredException {
         Field[] fields = clazz.getDeclaredFields();
         Iterable<Field> nonFinalFieldsWithInject = Iterables.filter(Lists.newArrayList(fields), new Predicate<Field>() {
             @Override
@@ -38,11 +38,15 @@ public class FieldInjector implements Injector {
         return null;
     }
 
-    private void setField(Object instance, Field field) throws IllegalAccessException, BeanCreateException, BeanNotRegisteredException {
+    private void setField(Object instance, Field field) throws BeanCreateException, BeanNotRegisteredException {
         field.setAccessible(true);
 
         Class<?> fieldType = field.getType();
         List<Object> fieldValue = beanObjectCreator.getInstances(new Class<?>[]{fieldType});
-        field.set(instance, fieldValue.get(0));
+        try {
+            field.set(instance, fieldValue.get(0));
+        } catch (IllegalAccessException e) {
+            new BeanCreateException("Failed to inject field " + field.getName() + ", caused by: ", e);
+        }
     }
 }

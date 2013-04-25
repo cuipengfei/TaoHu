@@ -7,7 +7,6 @@ import taohu.inject.ctor.AnnotatedNoParaCtor;
 import taohu.inject.ctor.NoParaCtor;
 import taohu.inject.ctor.OneParaCtor;
 import taohu.inject.ctor.TwoCtorsWithOneAnnotation;
-import taohu.inject.exception.BeanCreateException;
 import taohu.inject.exception.BeanNotRegisteredException;
 import taohu.model.BeanDescriptor;
 import taohu.resolver.BeanConfigurationResolver;

@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import taohu.inject.ctor.NoParaCtor;
-import taohu.resolver.BeanConfigurationResolver;
 import taohu.inject.setter.*;
+import taohu.resolver.BeanConfigurationResolver;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;

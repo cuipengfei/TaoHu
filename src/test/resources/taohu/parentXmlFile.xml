@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="taohu" xsi:schemaLocation="taohu bean.xsd">
+
+    <bean id="annotatedNoParaCtor" class="taohu.inject.ctor.AnnotatedNoParaCtor"/>
+
+</beans>

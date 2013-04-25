@@ -9,7 +9,6 @@ import taohu.inject.exception.BeanNotRegisteredException;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class SetterInjector implements Injector {
     }
 
     @Override
-    public Object inject(Object instance, Class<?> clazz) throws ReflectiveOperationException, BeanCreateException, BeanNotRegisteredException {
+    public Object inject(Object instance, Class<?> clazz) throws BeanCreateException, BeanNotRegisteredException {
         Method[] methods = clazz.getDeclaredMethods();
         Iterable<Method> methodsWithInjectAndNoTypeParaOfItsOwn = Iterables.filter(Lists.newArrayList(methods), new Predicate<Method>() {
             @Override
@@ -39,14 +38,19 @@ public class SetterInjector implements Injector {
         return null;
     }
 
-    private void callSetter(Object instance, Method method) throws IllegalAccessException, InvocationTargetException, BeanCreateException, BeanNotRegisteredException {
+    private void callSetter(Object instance, Method method) throws BeanCreateException, BeanNotRegisteredException {
         Class<?>[] parameterTypes = method.getParameterTypes();
         method.setAccessible(true);
-        if (parameterTypes.length == 0) {
-            method.invoke(instance);
-        } else {
-            List<Object> parameters = beanObjectCreator.getInstances(parameterTypes);
-            method.invoke(instance, parameters.toArray());
+
+        try {
+            if (parameterTypes.length == 0) {
+                method.invoke(instance);
+            } else {
+                List<Object> parameters = beanObjectCreator.getInstances(parameterTypes);
+                method.invoke(instance, parameters.toArray());
+            }
+        } catch (Exception e) {
+            throw new BeanCreateException("Fail to invoke method " + method.getName() + " caused by: ", e);
         }
     }
 }

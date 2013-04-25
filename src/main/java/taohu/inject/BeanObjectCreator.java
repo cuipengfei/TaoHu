@@ -5,6 +5,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import taohu.inject.exception.BeanCreateException;
 import taohu.inject.exception.BeanNotRegisteredException;
+import taohu.inject.exception.LackOfAnnotationException;
 import taohu.inject.injectors.Injector;
 import taohu.inject.injectors.InjectorFactory;
 import taohu.resolver.BeanConfigurationResolver;
@@ -57,7 +58,7 @@ public class BeanObjectCreator {
         return doCreateObject(clazz);
     }
 
-    private Object doCreateObject(Class<?> clazz) throws Exception {
+    private Object doCreateObject(Class<?> clazz) throws LackOfAnnotationException, BeanNotRegisteredException, BeanCreateException {
         Object instance = null;
         instance = constructorInjector.inject(instance, clazz);
         fieldInjector.inject(instance, clazz);
@@ -65,7 +66,7 @@ public class BeanObjectCreator {
         return instance;
     }
 
-    private Object getFromCacheOrCreate(Class<?> clazz) throws Exception {
+    private Object getFromCacheOrCreate(Class<?> clazz) throws LackOfAnnotationException, BeanCreateException, BeanNotRegisteredException {
         Object obj = objectCache.get(clazz);
         if (obj == null) {
             obj = this.doCreateObject(clazz);
