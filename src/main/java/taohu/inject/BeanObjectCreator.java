@@ -32,6 +32,7 @@ public class BeanObjectCreator {
         setterInjector = InjectorFactory.getSetterInjector(this);
     }
 
+    //why is this here?
     public Object createBeanObject(String beanId) throws Exception {
         Class beanClass = beanConfigurationResolver.getBeanClass(beanId);
 
@@ -43,10 +44,7 @@ public class BeanObjectCreator {
     }
 
     public Object createBeanObject(Class<?> clazz) throws Exception {
-
-        if (!beanConfigurationResolver.containsBean(clazz)) {
-            throw new BeanNotRegisteredToCreateException("This class is not registered in xml: " + clazz);
-        }
+        throwIfNotRegistered(clazz);
 
         if (isSingleton(clazz)) {
             return getFromCacheOrCreate(clazz);
@@ -55,9 +53,15 @@ public class BeanObjectCreator {
         return doCreateObject(clazz);
     }
 
+    private void throwIfNotRegistered(Class<?> clazz) throws BeanNotRegisteredToCreateException {
+        if (!beanConfigurationResolver.containsBean(clazz)) {
+            throw new BeanNotRegisteredToCreateException("This class is not registered in xml: " + clazz);
+        }
+    }
+
     private Object doCreateObject(Class<?> clazz) throws Exception {
-        Object instance;
-        instance = constructorInjector.inject(null, clazz);
+        Object instance = null;
+        instance = constructorInjector.inject(instance, clazz);
         fieldInjector.inject(instance, clazz);
         setterInjector.inject(instance, clazz);
         return instance;
