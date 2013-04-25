@@ -22,6 +22,7 @@ import java.util.Map;
 public class ClassPathXMLTaoHuContainer {
 
     private Map<String, BeanObjectCreator> creatorsWithScopeName;
+    private BeanConfigurationResolver beanConfigurationResolver;
 
     public ClassPathXMLTaoHuContainer() {
         this.creatorsWithScopeName = new HashMap<>();
@@ -32,9 +33,9 @@ public class ClassPathXMLTaoHuContainer {
         XmlBeanParser xmlBeanParser = new XmlBeanParser(xmlURI);
         List<BeanDescriptor> beanDescriptors = xmlBeanParser.parseBeans();
 
-        BeanConfigurationResolver resolver = new BeanConfigurationResolver(beanDescriptors);
+        beanConfigurationResolver = new BeanConfigurationResolver(beanDescriptors);
 
-        BeanObjectCreator creator = new BeanObjectCreator(resolver);
+        BeanObjectCreator creator = new BeanObjectCreator(beanConfigurationResolver);
         creatorsWithScopeName.put(getScopeName(xmlFilePath), creator);
     }
 
@@ -61,7 +62,7 @@ public class ClassPathXMLTaoHuContainer {
             public Object apply(@Nullable BeanObjectCreator input) {
                 Object bean = null;
                 try {
-                    bean = input.getBeanObject(id);
+                    bean = input.getBeanObject(beanConfigurationResolver.getBeanClass(id));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -24,7 +24,7 @@ public class BeanConfigurationResolver {
             public boolean apply(@Nullable BeanDescriptor input) {
                 return input.getBeanId().equals(beanId);
             }
-        });
+        }, null);
 
         return beanDescriptor == null ? null : beanDescriptor.getClazz();
     }

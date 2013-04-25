@@ -24,6 +24,7 @@ public class BeanObjectCreator {
     private Injector constructorInjector;
     private Injector fieldInjector;
     private Injector setterInjector;
+    private BeanObjectCreator parentCreator;
 
     public BeanObjectCreator(BeanConfigurationResolver beanConfigurationResolver) {
         this.beanConfigurationResolver = beanConfigurationResolver;
@@ -34,25 +35,25 @@ public class BeanObjectCreator {
         setterInjector = InjectorFactory.getSetterInjector(this);
     }
 
-    public Object getBeanObject(String id) throws Exception {
-        Class<?> beanClass = beanConfigurationResolver.getBeanClass(id);
-        return getBeanObject(beanClass);
+    public BeanObjectCreator(BeanConfigurationResolver beanConfigurationResolver, BeanObjectCreator parentCreator) {
+        this(beanConfigurationResolver);
+        this.parentCreator = parentCreator;
     }
 
     public Object getBeanObject(Class<?> clazz) throws Exception {
-        throwIfNotRegistered(clazz);
+
+        if(!beanConfigurationResolver.containsBean(clazz)){
+            if(parentCreator!=null){
+                return parentCreator.getBeanObject(clazz);
+            }
+            throw new BeanNotRegisteredException("This class is not registered in xml: " + clazz);
+        }
 
         if (isSingleton(clazz)) {
             return getFromCacheOrCreate(clazz);
         }
 
         return doCreateObject(clazz);
-    }
-
-    private void throwIfNotRegistered(Class<?> clazz) throws BeanNotRegisteredException {
-        if (!beanConfigurationResolver.containsBean(clazz)) {
-            throw new BeanNotRegisteredException("This class is not registered in xml: " + clazz);
-        }
     }
 
     private Object doCreateObject(Class<?> clazz) throws Exception {
