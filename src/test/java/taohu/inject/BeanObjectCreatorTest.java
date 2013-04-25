@@ -4,14 +4,15 @@ import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import taohu.inject.ctor.AnnotatedNoParaCtor;
+import taohu.inject.ctor.NoParaCtor;
 import taohu.inject.ctor.OneParaCtor;
+import taohu.inject.ctor.TwoCtorsWithOneAnnotation;
+import taohu.inject.exception.BeanCreateException;
 import taohu.inject.exception.BeanNotRegisteredException;
 import taohu.model.BeanDescriptor;
 import taohu.resolver.BeanConfigurationResolver;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.isA;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
@@ -56,7 +57,7 @@ public class BeanObjectCreatorTest {
     }
 
     @Test
-    public void shouldGetCreateBeanInParentCreator() throws Exception {
+    public void shouldCreateBeanInParentCreator() throws Exception {
         BeanConfigurationResolver parentResolver = new BeanConfigurationResolver(Lists.newArrayList(new BeanDescriptor("noPara", AnnotatedNoParaCtor.class)));
         BeanConfigurationResolver childResolver = new BeanConfigurationResolver(Lists.newArrayList(new BeanDescriptor("onePara", OneParaCtor.class)));
 
@@ -65,11 +66,11 @@ public class BeanObjectCreatorTest {
 
         Object noPara = childCreator.getBeanObject(AnnotatedNoParaCtor.class);
         assertThat(noPara, notNullValue());
-        assertThat((AnnotatedNoParaCtor)noPara, isA(AnnotatedNoParaCtor.class));
+        assertThat((AnnotatedNoParaCtor) noPara, isA(AnnotatedNoParaCtor.class));
     }
 
     @Test
-    public void shouldGetCreateBeanWithParaBeanDefinedInParent() throws Exception {
+    public void shouldCreateBeanWithParaBeanDefinedInParent() throws Exception {
         BeanConfigurationResolver parentResolver = new BeanConfigurationResolver(Lists.newArrayList(new BeanDescriptor("noPara", AnnotatedNoParaCtor.class)));
         BeanConfigurationResolver childResolver = new BeanConfigurationResolver(Lists.newArrayList(new BeanDescriptor("onePara", OneParaCtor.class)));
 
@@ -82,5 +83,27 @@ public class BeanObjectCreatorTest {
 
         assertThat(onePara.getAnnotatedNoParaCtor(), notNullValue());
         assertThat(onePara.getAnnotatedNoParaCtor(), isA(AnnotatedNoParaCtor.class));
+    }
+
+    @Test(expected = BeanNotRegisteredException.class)
+    public void shouldNotCreateBeanNotDefinedInParentAndChild() throws Exception {
+        BeanConfigurationResolver parentResolver = new BeanConfigurationResolver(Lists.newArrayList(new BeanDescriptor("noPara", AnnotatedNoParaCtor.class)));
+        BeanConfigurationResolver childResolver = new BeanConfigurationResolver(Lists.newArrayList(new BeanDescriptor("onePara", OneParaCtor.class)));
+
+        BeanObjectCreator parentCreator = new BeanObjectCreator(parentResolver);
+        BeanObjectCreator childCreator = new BeanObjectCreator(childResolver, parentCreator);
+
+        Object onePara = childCreator.getBeanObject(TwoCtorsWithOneAnnotation.class);
+    }
+
+    @Test(expected = BeanNotRegisteredException.class)
+    public void shouldNotCreateBeanWithParaNotDefinedInParentAndChild() throws Exception {
+        BeanConfigurationResolver parentResolver = new BeanConfigurationResolver(Lists.newArrayList(new BeanDescriptor("noPara", NoParaCtor.class)));
+        BeanConfigurationResolver childResolver = new BeanConfigurationResolver(Lists.newArrayList(new BeanDescriptor("onePara", OneParaCtor.class)));
+
+        BeanObjectCreator parentCreator = new BeanObjectCreator(parentResolver);
+        BeanObjectCreator childCreator = new BeanObjectCreator(childResolver, parentCreator);
+
+        Object onePara = childCreator.getBeanObject(OneParaCtor.class);
     }
 }

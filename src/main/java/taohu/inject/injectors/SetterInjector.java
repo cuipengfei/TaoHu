@@ -4,6 +4,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import taohu.inject.BeanObjectCreator;
+import taohu.inject.exception.BeanCreateException;
+import taohu.inject.exception.BeanNotRegisteredException;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -20,7 +22,7 @@ public class SetterInjector implements Injector {
     }
 
     @Override
-    public Object inject(Object instance, Class<?> clazz) throws ReflectiveOperationException {
+    public Object inject(Object instance, Class<?> clazz) throws ReflectiveOperationException, BeanCreateException, BeanNotRegisteredException {
         Method[] methods = clazz.getDeclaredMethods();
         Iterable<Method> methodsWithInjectAndNoTypeParaOfItsOwn = Iterables.filter(Lists.newArrayList(methods), new Predicate<Method>() {
             @Override
@@ -37,7 +39,7 @@ public class SetterInjector implements Injector {
         return null;
     }
 
-    private void callSetter(Object instance, Method method) throws IllegalAccessException, InvocationTargetException {
+    private void callSetter(Object instance, Method method) throws IllegalAccessException, InvocationTargetException, BeanCreateException, BeanNotRegisteredException {
         Class<?>[] parameterTypes = method.getParameterTypes();
         method.setAccessible(true);
         if (parameterTypes.length == 0) {

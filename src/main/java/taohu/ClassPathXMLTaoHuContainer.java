@@ -1,73 +1,64 @@
 package taohu;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import org.xml.sax.SAXException;
 import taohu.inject.BeanObjectCreator;
+import taohu.inject.exception.BeanCreateException;
+import taohu.inject.exception.BeanNotRegisteredException;
 import taohu.model.BeanDescriptor;
 import taohu.resolver.BeanConfigurationResolver;
 import taohu.resolver.XmlBeanParser;
 
-import javax.annotation.Nullable;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ClassPathXMLTaoHuContainer {
 
-    private Map<String, BeanObjectCreator> creatorsWithScopeName;
     private BeanConfigurationResolver beanConfigurationResolver;
 
-    public ClassPathXMLTaoHuContainer() {
-        this.creatorsWithScopeName = new HashMap<>();
+    private ClassPathXMLTaoHuContainer parentContainer;
+
+    private BeanObjectCreator beanObjectCreator;
+
+    public ClassPathXMLTaoHuContainer(String xmlFilePath) throws BeanCreateException {
+        this(xmlFilePath, null);
     }
 
-    public void addXMLConfig(String xmlFilePath) throws URISyntaxException, ClassNotFoundException, IOException, SAXException, ParserConfigurationException {
-        URI xmlURI = getClass().getClassLoader().getResource(xmlFilePath).toURI();
-        XmlBeanParser xmlBeanParser = new XmlBeanParser(xmlURI);
-        List<BeanDescriptor> beanDescriptors = xmlBeanParser.parseBeans();
+    public ClassPathXMLTaoHuContainer(String xmlFilePath, ClassPathXMLTaoHuContainer parentContainer) throws BeanCreateException {
+        this.parentContainer = parentContainer;
 
-        beanConfigurationResolver = new BeanConfigurationResolver(beanDescriptors);
+        createBeanResolver(xmlFilePath);
 
-        BeanObjectCreator creator = new BeanObjectCreator(beanConfigurationResolver);
-        creatorsWithScopeName.put(getScopeName(xmlFilePath), creator);
+        this.beanObjectCreator = new BeanObjectCreator(beanConfigurationResolver);
     }
 
-    private String getScopeName(String xmlFilePath) {
-        return xmlFilePath + xmlFilePath.hashCode();
+    public Object getBeanByID(String beanId) throws Exception {
+
+        Class clazz = beanConfigurationResolver.getBeanClass(beanId);
+        if (clazz == null) {
+            clazz = parentContainer.getBeanConfigurationResolver().getBeanClass(beanId);
+        }
+
+        if (clazz == null) {
+            throw new BeanNotRegisteredException("The required bean is not registered, bean id: " + beanId);
+        }
+
+        return beanObjectCreator.getBeanObject(clazz);
     }
 
-    public Object getBeanByID(final String id) throws Exception {
-        Iterable<Object> objects = getBeanFromAllCreators(id);
-
-        Optional<Object> objectOptional = Iterables.tryFind(objects, new Predicate<Object>() {
-            @Override
-            public boolean apply(@Nullable Object input) {
-                return input != null;
-            }
-        });
-
-        return objectOptional.isPresent() ? objectOptional.get() : null;
+    public BeanConfigurationResolver getBeanConfigurationResolver() {
+        return beanConfigurationResolver;
     }
 
-    private Iterable<Object> getBeanFromAllCreators(final String id) {
-        return Iterables.transform(creatorsWithScopeName.values(), new Function<BeanObjectCreator, Object>() {
-            @Override
-            public Object apply(@Nullable BeanObjectCreator input) {
-                Object bean = null;
-                try {
-                    bean = input.getBeanObject(beanConfigurationResolver.getBeanClass(id));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return bean;
-            }
-        });
+    private void createBeanResolver(String xmlFilePath) throws BeanCreateException {
+
+
+        URI xmlURI = null;
+        try {
+            xmlURI = getClass().getClassLoader().getResource(xmlFilePath).toURI();
+            XmlBeanParser xmlBeanParser = new XmlBeanParser(xmlURI);
+            List<BeanDescriptor> beanDescriptors = xmlBeanParser.parseBeans();
+            beanConfigurationResolver = new BeanConfigurationResolver(beanDescriptors);
+        } catch (Exception e) {
+            throw new BeanCreateException("Fail to parse xml file: " + xmlFilePath + ", caused by: ", e);
+        }
     }
 }

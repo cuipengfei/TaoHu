@@ -4,6 +4,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import taohu.inject.BeanObjectCreator;
+import taohu.inject.exception.BeanCreateException;
+import taohu.inject.exception.BeanNotRegisteredException;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -20,7 +22,7 @@ public class FieldInjector implements Injector {
     }
 
     @Override
-    public Object inject(Object instance, Class<?> clazz) throws IllegalAccessException {
+    public Object inject(Object instance, Class<?> clazz) throws IllegalAccessException, BeanCreateException, BeanNotRegisteredException {
         Field[] fields = clazz.getDeclaredFields();
         Iterable<Field> nonFinalFieldsWithInject = Iterables.filter(Lists.newArrayList(fields), new Predicate<Field>() {
             @Override
@@ -36,7 +38,7 @@ public class FieldInjector implements Injector {
         return null;
     }
 
-    private void setField(Object instance, Field field) throws IllegalAccessException {
+    private void setField(Object instance, Field field) throws IllegalAccessException, BeanCreateException, BeanNotRegisteredException {
         field.setAccessible(true);
 
         Class<?> fieldType = field.getType();

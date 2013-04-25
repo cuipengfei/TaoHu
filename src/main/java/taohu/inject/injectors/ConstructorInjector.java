@@ -5,6 +5,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import taohu.inject.BeanObjectCreator;
 import taohu.inject.enums.ConstructorAnnotationStatus;
+import taohu.inject.exception.BeanCreateException;
+import taohu.inject.exception.BeanNotRegisteredException;
 import taohu.inject.exception.LackOfAnnotationException;
 
 import javax.annotation.Nullable;
@@ -67,7 +69,7 @@ public class ConstructorInjector implements Injector {
     }
 
     private Object injectConstructor(Constructor<?> constructor)
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+            throws InstantiationException, IllegalAccessException, InvocationTargetException, BeanCreateException, BeanNotRegisteredException {
         Class<?>[] parameterTypes = constructor.getParameterTypes();
         List<Object> parameters = beanObjectCreator.getInstances(parameterTypes);
 

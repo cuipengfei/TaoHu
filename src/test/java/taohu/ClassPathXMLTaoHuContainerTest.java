@@ -13,8 +13,7 @@ import static org.junit.Assert.assertThat;
 public class ClassPathXMLTaoHuContainerTest {
     @Test
     public void shouldCreateObjectWhenBeanIsDefinedInXML() throws Exception, IOException, ClassNotFoundException, SAXException, ParserConfigurationException {
-        ClassPathXMLTaoHuContainer classPathXMLTaoHuContainer = new ClassPathXMLTaoHuContainer();
-        classPathXMLTaoHuContainer.addXMLConfig("taohu/legalXmlFile.xml");
+        ClassPathXMLTaoHuContainer classPathXMLTaoHuContainer = new ClassPathXMLTaoHuContainer("taohu/legalXmlFile.xml");
 
         Object first = classPathXMLTaoHuContainer.getBeanByID("first");
 

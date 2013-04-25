@@ -1,9 +1,9 @@
 package taohu.inject;
 
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import taohu.inject.exception.BeanCreateException;
 import taohu.inject.exception.BeanNotRegisteredException;
 import taohu.inject.injectors.Injector;
 import taohu.inject.injectors.InjectorFactory;
@@ -12,6 +12,7 @@ import taohu.resolver.BeanConfigurationResolver;
 import javax.annotation.Nullable;
 import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,8 +43,8 @@ public class BeanObjectCreator {
 
     public Object getBeanObject(Class<?> clazz) throws Exception {
 
-        if(!beanConfigurationResolver.containsBean(clazz)){
-            if(parentCreator!=null){
+        if (!beanConfigurationResolver.containsBean(clazz)) {
+            if (parentCreator != null) {
                 return parentCreator.getBeanObject(clazz);
             }
             throw new BeanNotRegisteredException("This class is not registered in xml: " + clazz);
@@ -83,16 +84,18 @@ public class BeanObjectCreator {
         });
     }
 
-    public List<Object> getInstances(Class<?>[] instanceTypes) {
-        return Lists.transform(Lists.newArrayList(instanceTypes), new Function<Class<?>, Object>() {
-            @Override
-            public Object apply(@Nullable Class<?> instanceType) {
-                try {
-                    return getBeanObject(instanceType);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+    public List<Object> getInstances(Class<?>[] instanceTypes) throws BeanCreateException, BeanNotRegisteredException {
+
+        List<Object> objs = new ArrayList<>();
+        for (Class<?> clazz : instanceTypes) {
+            try {
+                objs.add(getBeanObject(clazz));
+            } catch(BeanNotRegisteredException e){
+                throw e;
+            } catch (Exception e) {
+                throw new BeanCreateException("Fail to create bean of class " + clazz + ", caused by: ", e);
             }
-        });
+        }
+        return objs;
     }
 }
